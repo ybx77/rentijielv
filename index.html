@@ -184,6 +184,7 @@
             position: relative;
         }
         
+        /* 修改生日按钮样式 - 粉色设计 */
         .edit-btn {
             position: absolute;
             top: 20px;
@@ -305,46 +306,12 @@
             padding: 10px;
             border-radius: 10px;
             background: rgba(248, 187, 208, 0.2);
-            position: relative;
         }
         
         .status-title {
             font-size: 0.85rem;
             color: #7f8c8d;
             margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-        
-        .status-info {
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: #d81b60;
-        }
-        
-        .status-tooltip {
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 8px;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            width: 160px;
-            text-align: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
-        
-        .status-info:hover + .status-tooltip {
-            opacity: 1;
-            visibility: visible;
         }
         
         .status-value {
@@ -382,9 +349,6 @@
             font-size: 1.2rem;
             color: #d81b60;
             margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         
         .advice-list {
@@ -450,6 +414,77 @@
             70% { box-shadow: 0 0 0 10px rgba(255, 152, 0, 0); }
             100% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); }
         }
+        
+        /* 移动端优化 */
+        @media (max-width: 767px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header {
+                padding: 15px 10px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .input-section {
+                padding: 15px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .person-input {
+                min-width: 100%;
+            }
+            
+            .results-section {
+                padding: 15px;
+            }
+            
+            .overview-card {
+                padding: 15px;
+            }
+            
+            .person-card {
+                padding: 15px;
+            }
+            
+            .rhythm-status {
+                flex-direction: column;
+            }
+            
+            .status-item {
+                width: 100%;
+            }
+            
+            .chart-container {
+                height: 150px;
+            }
+            
+            .edit-btn {
+                top: 15px;
+                right: 15px;
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .advice-card {
+                padding: 15px;
+            }
+            
+            .comparison-advice {
+                padding: 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -466,7 +501,7 @@
                         <div class="person-title">👩 女方信息</div>
                         <div class="form-group">
                             <label for="femaleName">昵称：</label>
-                            <input type="text" id="femaleName" placeholder="她的昵称" value="亲爱的">
+                            <input type="text" id="femaleName" placeholder="她的昵称" value="十一">
                         </div>
                         <div class="form-group">
                             <label for="femaleBirthdate">生日：</label>
@@ -478,11 +513,11 @@
                         <div class="person-title">👨 男方信息</div>
                         <div class="form-group">
                             <label for="maleName">昵称：</label>
-                            <input type="text" id="maleName" placeholder="他的昵称" value="男朋友">
+                            <input type="text" id="maleName" placeholder="他的昵称" value="十九">
                         </div>
                         <div class="form-group">
                             <label for="maleBirthdate">生日：</label>
-                            <input type="date" id="maleBirthdate" required>
+                            <input type="date" id="maleBirthdate" value="2002-10-03" required>
                         </div>
                     </div>
                 </div>
@@ -510,46 +545,22 @@
                     <div class="person-header">
                         <div class="person-icon female">👩</div>
                         <div>
-                            <div class="person-name" id="femaleDisplayName">亲爱的</div>
+                            <div class="person-name" id="femaleDisplayName">十一</div>
                             <div class="person-birthdate" id="femaleDisplayBirthdate">2003年6月11日</div>
                         </div>
                     </div>
                     
                     <div class="rhythm-status">
                         <div class="status-item">
-                            <div class="status-title">
-                                体力状态
-                                <span class="status-info">ⓘ</span>
-                                <div class="status-tooltip">
-                                    高潮期：精力充沛<br>
-                                    临界期：状态波动<br>
-                                    低潮期：容易疲劳
-                                </div>
-                            </div>
+                            <div class="status-title">体力状态</div>
                             <div class="status-value status-high" id="femalePhysicalStatus">高潮期</div>
                         </div>
                         <div class="status-item">
-                            <div class="status-title">
-                                情绪状态
-                                <span class="status-info">ⓘ</span>
-                                <div class="status-tooltip">
-                                    高潮期：情绪积极<br>
-                                    临界期：容易波动<br>
-                                    低潮期：情绪低落
-                                </div>
-                            </div>
+                            <div class="status-title">情绪状态</div>
                             <div class="status-value status-low" id="femaleEmotionalStatus">低潮期</div>
                         </div>
                         <div class="status-item">
-                            <div class="status-title">
-                                智力状态
-                                <span class="status-info">ⓘ</span>
-                                <div class="status-tooltip">
-                                    高潮期：思维敏捷<br>
-                                    临界期：注意力分散<br>
-                                    低潮期：思考迟缓
-                                </div>
-                            </div>
+                            <div class="status-title">智力状态</div>
                             <div class="status-value status-high" id="femaleIntellectualStatus">高潮期</div>
                         </div>
                     </div>
@@ -560,12 +571,7 @@
                     
                     <div class="advice-card">
                         <h3>💌 给他的建议</h3>
-                        <ul class="advice-list">
-                            <li>今天他体力可能不稳定，避免剧烈运动</li>
-                            <li>情绪很好，适合一起规划未来</li>
-                            <li>思维可能不够清晰，重要决策可以缓一缓</li>
-                            <li>晚上陪他聊聊天，分享彼此的想法</li>
-                        </ul>
+                        <ul class="advice-list" id="femaleAdviceList"></ul>
                     </div>
                 </div>
                 
@@ -573,46 +579,22 @@
                     <div class="person-header">
                         <div class="person-icon male">👨</div>
                         <div>
-                            <div class="person-name" id="maleDisplayName">男朋友</div>
-                            <div class="person-birthdate" id="maleDisplayBirthdate">1998年3月15日</div>
+                            <div class="person-name" id="maleDisplayName">十九</div>
+                            <div class="person-birthdate" id="maleDisplayBirthdate">2002年10月03日</div>
                         </div>
                     </div>
                     
                     <div class="rhythm-status">
                         <div class="status-item">
-                            <div class="status-title">
-                                体力状态
-                                <span class="status-info">ⓘ</span>
-                                <div class="status-tooltip">
-                                    高潮期：精力充沛<br>
-                                    临界期：状态波动<br>
-                                    低潮期：容易疲劳
-                                </div>
-                            </div>
+                            <div class="status-title">体力状态</div>
                             <div class="status-value status-critical" id="malePhysicalStatus">临界期</div>
                         </div>
                         <div class="status-item">
-                            <div class="status-title">
-                                情绪状态
-                                <span class="status-info">ⓘ</span>
-                                <div class="status-tooltip">
-                                    高潮期：情绪积极<br>
-                                    临界期：容易波动<br>
-                                    低潮期：情绪低落
-                                </div>
-                            </div>
+                            <div class="status-title">情绪状态</div>
                             <div class="status-value status-high" id="maleEmotionalStatus">高潮期</div>
                         </div>
                         <div class="status-item">
-                            <div class="status-title">
-                                智力状态
-                                <span class="status-info">ⓘ</span>
-                                <div class="status-tooltip">
-                                    高潮期：思维敏捷<br>
-                                    临界期：注意力分散<br>
-                                    低潮期：思考迟缓
-                                </div>
-                            </div>
+                            <div class="status-title">智力状态</div>
                             <div class="status-value status-low" id="maleIntellectualStatus">低潮期</div>
                         </div>
                     </div>
@@ -623,25 +605,14 @@
                     
                     <div class="advice-card">
                         <h3>💌 给她的建议</h3>
-                        <ul class="advice-list">
-                            <li>今天她体力充沛，可以一起运动或户外活动</li>
-                            <li>情绪可能有些低落，给她一个温暖的拥抱</li>
-                            <li>思维清晰，适合一起学习新东西</li>
-                            <li>晚上陪她看部温馨的电影放松心情</li>
-                        </ul>
+                        <ul class="advice-list" id="maleAdviceList"></ul>
                     </div>
                 </div>
             </div>
             
             <div class="comparison-advice">
                 <h2>📅 今天怎么相处最合适</h2>
-                <ul class="advice-list">
-                    <li><strong>上午：</strong>她体力充沛，可以让她主导活动；他情绪高涨，多倾听他的想法</li>
-                    <li><strong>中午：</strong>一起准备午餐，享受温馨的二人时光</li>
-                    <li><strong>下午：</strong>她思维清晰，可以一起学习；他需要适当休息</li>
-                    <li><strong>晚上：</strong>她情绪需要安抚，多给她拥抱；他思维不太清晰，避免讨论复杂话题</li>
-                    <li><strong>特别提示：</strong>关注她即将到来的体力临界日，那时需要你更多的照顾</li>
-                </ul>
+                <ul class="advice-list" id="interactionAdvice"></ul>
             </div>
         </section>
         
@@ -728,7 +699,7 @@
                         label: '状态值',
                         data: [
                             getStatusValue(maleResults.physical.phase),
-                            getStatusValue(maleResults.emotional.phase),
+                            get极值(maleResults.emotional.phase),
                             getStatusValue(maleResults.intellectual.phase)
                         ],
                         backgroundColor: 'rgba(52, 152, 219, 0.2)',
@@ -759,7 +730,7 @@
                             display: true,
                             text: '他的节律状态',
                             font: {
-                                size: 16
+                                size极值: 16
                             }
                         }
                     }
@@ -825,10 +796,93 @@
             };
         }
         
+        // 生成建议内容
+        function generateAdvice(results, gender) {
+            const adviceList = [];
+            
+            // 体力状态建议
+            if (results.physical.phase === '高潮期') {
+                adviceList.push(`今天${gender === 'female' ? '她' : '他'}体力充沛，适合一起运动或户外活动`);
+            } else if (results.physical.phase === '临界期') {
+                adviceList.push(`${gender === 'female' ? '她' : '他'}体力状态不稳定，避免安排高强度活动`);
+            } else {
+                adviceList.push(`${gender === 'female' ? '她' : '他'}容易疲劳，需要适当休息`);
+            }
+            
+            // 情绪状态建议
+            if (results.emotional.phase === '高潮期') {
+                adviceList.push(`${gender === 'female' ? '她' : '他'}情绪积极，适合一起规划未来`);
+            } else if (results.emotional.phase === '临界期') {
+                adviceList.push(`${gender === 'female' ? '她' : '他'}情绪容易波动，多给予理解和包容`);
+            } else {
+                adviceList.push(`${gender === 'female' ? '她' : '他'}情绪低落，需要更多的关心和陪伴`);
+            }
+            
+            // 智力状态建议
+            if (results.intellectual.phase === '高潮期') {
+                adviceList.push(`${gender === 'female'极值 ? '她' : '他'}思维敏捷，适合一起学习新东西`);
+            } else if (results.intellectual.phase === '临界期') {
+                adviceList.push(`${gender === 'female' ? '她' : '他'}注意力容易分散，避免讨论复杂话题`);
+            } else {
+                adviceList.push(`${gender === 'female' ? '她' : '他'}思考可能不够清晰，重要决策可以缓一缓`);
+            }
+            
+            // 通用建议
+            adviceList.push(`晚上陪${gender === 'female' ? '她' : '他'}聊聊天，分享彼此的想法`);
+            
+            return adviceList;
+        }
+        
+        // 生成相处建议
+        function generateInteractionAdvice(femaleResults, maleResults) {
+            const adviceList = [];
+            
+            // 上午建议
+            if (femaleResults.physical.phase === '高潮期') {
+                adviceList.push(`<strong>上午：</strong>她体力充沛，可以让她主导活动`);
+            } else if (maleResults.physical.phase === '高潮期') {
+                adviceList.push(`<strong>上午：</strong>他体力充沛，可以让他主导活动`);
+            } else {
+                adviceList.push(`<strong>上午：</strong>双方体力都不算最佳，适合轻松的活动`);
+            }
+            
+            // 中午建议
+            adviceList.push(`<strong>中午：</strong>一起准备午餐，享受温馨的二人时光`);
+            
+            // 下午建议
+            if (femaleResults.intellectual.phase === '高潮期') {
+                adviceList.push(`<strong>下午：</strong>她思维清晰，可以一起学习新东西`);
+            } else if (maleResults.intellectual.phase === '高潮期') {
+                adviceList.push(`<strong>下午：</strong>他思维清晰，可以一起规划未来`);
+            } else {
+                adviceList.push(`<strong>下午：</strong>双方思维都不在最佳状态，适合轻松阅读或看电影`);
+            }
+            
+            // 晚上建议
+            if (femaleResults.emotional.phase === '低潮期') {
+                adviceList.push(`<strong>晚上：</strong>她情绪需要安抚，多给她温暖的拥抱`);
+            } else if (maleResults.emotional.phase === '低潮期') {
+                adviceList.push(`<strong>晚上：</strong>他情绪需要安抚，多倾听他的想法`);
+            } else {
+                adviceList.push(`<strong>晚上：</strong>一起看部温馨的电影放松心情`);
+            }
+            
+            // 特别提示
+            if (femaleResults.physical.phase === '临界期' || maleResults.physical.phase === '临界期') {
+                adviceList.push(`<strong>特别提示：</strong>关注体力临界期，避免过度劳累`);
+            } else if (femaleResults.emotional.phase === '临界期' || maleResults.emotional.phase === '临界期') {
+                adviceList.push(`<strong>特别提示：</strong>关注情绪临界期，多给予理解和包容`);
+            } else {
+                adviceList.push(`<strong>特别提示：</strong>今天是相处的好日子，好好享受二人时光`);
+            }
+            
+            return adviceList;
+        }
+        
         // 更新状态显示
         function updateStatusDisplay(femaleResults, maleResults) {
             // 更新女方信息
-            const femaleName = document.getElementById('femaleName').value || '亲爱的';
+            const femaleName = document.getElementById('femaleName').value || '十一';
             const femaleBirthdate = document.getElementById('femaleBirthdate').value;
             
             document.getElementById('femaleDisplayName').textContent = femaleName;
@@ -844,7 +898,7 @@
             document.getElementById('femaleIntellectualStatus').className = 'status-value ' + getStatusClass(femaleResults.intellectual.phase);
             
             // 更新男方信息
-            const maleName = document.getElementById('maleName').value || '男朋友';
+            const maleName = document.getElementById('maleName').value || '十九';
             const maleBirthdate = document.getElementById('maleBirthdate').value;
             
             document.getElementById('maleDisplayName').textContent = maleName;
@@ -864,6 +918,35 @@
             const formattedDate = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
             document.getElementById('targetDate').textContent = formattedDate;
             
+            // 生成并显示建议
+            const femaleAdviceList = document.getElementById('femaleAdviceList');
+            femaleAdviceList.innerHTML = '';
+            
+            // 交换建议内容：女方卡片显示给男方的建议
+            generateAdvice(femaleResults, 'male').forEach(advice => {
+                const li = document.createElement('li');
+                li.textContent = advice;
+                femaleAdviceList.appendChild(li);
+            });
+            
+            const maleAdviceList = document.getElementById('maleAdviceList');
+            maleAdviceList.innerHTML = '';
+            
+            // 交换建议内容：男方卡片显示给女方的建议
+            generateAdvice(maleResults, 'female').forEach(advice => {
+                const li = document.createElement('li');
+                li.textContent = advice;
+                maleAdviceList.appendChild(li);
+            });
+            
+            const interactionAdvice = document.getElementById('interactionAdvice');
+            interactionAdvice.innerHTML = '';
+            generateInteractionAdvice(femaleResults, maleResults).forEach(advice => {
+                const li = document.createElement('li');
+                li.innerHTML = advice;
+                interactionAdvice.appendChild(li);
+            });
+            
             // 渲染图表
             renderCharts(femaleResults, maleResults);
         }
@@ -878,8 +961,8 @@
         function saveBirthdays() {
             const femaleBirthdate = document.getElementById('femaleBirthdate').value;
             const maleBirthdate = document.getElementById('maleBirthdate').value;
-            const femaleName = document.getElementById('femaleName').value || '亲爱的';
-            const maleName = document.getElementById('maleName').value || '男朋友';
+            const femaleName = document.getElementById('femaleName').value || '十一';
+            const maleName = document.getElementById('maleName').value || '十九';
             
             localStorage.setItem('female_birthdate', femaleBirthdate);
             localStorage.setItem('male_birthdate', maleBirthdate);
@@ -980,10 +1063,8 @@
                     showResults();
                 }, 500);
             } else {
-                // 设置默认男方生日为当前日期减去5年
-                const now = new Date();
-                const fiveYearsAgo = new Date(now.getFullYear() - 5, now.getMonth(), now.getDate());
-                maleBirthdateInput.value = fiveYearsAgo.toISOString().split('T')[0];
+                // 使用HTML中设置的默认值
+                document.getElementById('savedInfo').style.display = 'block';
             }
             
             // 设置当前日期为目标日期
