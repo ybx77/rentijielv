@@ -41,7 +41,7 @@
             padding: 20px 15px;
             margin-bottom: 20px;
             background: rgba(255, 255, 255, 0.9);
-            border-radius极值: 15px;
+            border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
@@ -184,7 +184,6 @@
             position: relative;
         }
         
-        /* 修改生日按钮样式 - 粉色设计 */
         .edit-btn {
             position: absolute;
             top: 20px;
@@ -207,7 +206,7 @@
         .edit-btn:hover {
             background: #f48fb1;
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
         
         .overview-card {
@@ -317,7 +316,6 @@
         .status-value {
             font-size: 1.1rem;
             font-weight: 600;
-            word-break: break-word; /* 确保长文本换行 */
         }
         
         .status-high {
@@ -385,8 +383,43 @@
             font-size: 0.85rem;
         }
         
-        /* 移动端优化 */
-        @media (max-width: 767px) {
+        /* 手机适配优化 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.7rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .person-input {
+                min-width: 100%;
+            }
+            
+            .status-item {
+                min-width: calc(50% - 10px);
+            }
+            
+            .chart-container {
+                height: 160px;
+            }
+            
+            .person-name {
+                font-size: 1.2rem;
+            }
+            
+            .advice-card h3 {
+                font-size: 1.1rem;
+            }
+            
+            .edit-btn {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
             .container {
                 padding: 10px;
             }
@@ -395,64 +428,32 @@
                 padding: 15px 10px;
             }
             
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .subtitle {
-                font-size: 0.9rem;
-            }
-            
-            .input-section {
+            .input-section, .results-section {
                 padding: 15px;
             }
             
-            .form-row {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .person-input {
-                min-width: 100%;
-            }
-            
-            .results-section {
-                padding: 15px;
-            }
-            
-            .overview-card {
-                padding: 15px;
-            }
-            
-            .person-card {
-                padding: 15px;
-            }
-            
-            .rhythm-status {
-                flex-direction: column;
+            button {
+                padding: 12px;
+                font-size: 1rem;
             }
             
             .status-item {
-                width: 100%;
                 min-width: 100%;
             }
             
+            .status-value {
+                font-size: 1rem;
+            }
+            
+            .overview-card h2, .comparison-advice h2 {
+                font-size: 1.3rem;
+            }
+            
             .chart-container {
-                height: 150px;
+                height: 140px;
             }
             
-            .edit-btn {
-                top: 15px;
-                right: 15px;
-                padding: 6px 12px;
-                font-size: 0.8rem;
-            }
-            
-            .advice-card {
-                padding: 15px;
-            }
-            
-            .comparison-advice {
+            .person-card {
                 padding: 15px;
             }
         }
@@ -540,8 +541,9 @@
                         <canvas id="femaleChart"></canvas>
                     </div>
                     
-                    <div class极值 class="advice-card">
-                        <h3>💌 给他的建议</h3>
+                    <!-- 修改为给她的建议 -->
+                    <div class="advice-card">
+                        <h3>💌 给她的建议</h3>
                         <ul class="advice-list" id="femaleAdviceList"></ul>
                     </div>
                 </div>
@@ -551,12 +553,12 @@
                         <div class="person-icon male">👨</div>
                         <div>
                             <div class="person-name" id="maleDisplayName">十九</div>
-                            <div class="person-birthdate" id="maleDisplayBirthdate">2002年10月03日</div>
+                            <div class="person-birthdate" id="maleDisplayBirthdate">2002年10月3日</div>
                         </div>
                     </div>
                     
                     <div class="rhythm-status">
-                        <极值 div class="status-item">
+                        <div class="status-item">
                             <div class="status-title">体力状态</div>
                             <div class="status-value status-critical" id="malePhysicalStatus">临界期</div>
                         </div>
@@ -574,8 +576,9 @@
                         <canvas id="maleChart"></canvas>
                     </div>
                     
+                    <!-- 修改为给他的建议 -->
                     <div class="advice-card">
-                        <h3>💌 给她的建议</h3>
+                        <h3>💌 给他的建议</h3>
                         <ul class="advice-list" id="maleAdviceList"></ul>
                     </div>
                 </div>
@@ -767,84 +770,146 @@
             };
         }
         
-        // 生成建议内容
-        function generateAdvice(results, gender) {
+        // 生成给个人的建议（自我调节）
+        function generateSelfAdvice(results, gender) {
             const adviceList = [];
+            const pronoun = gender === 'female' ? '你' : '你';
+            const partnerPronoun = gender === 'female' ? '他' : '她';
             
             // 体力状态建议
             if (results.physical.phase === '高潮期') {
-                adviceList.push(`今天${gender === 'female' ? '她' : '他'}体力充沛，适合一起运动或户外活动`);
+                adviceList.push(`${pronoun}今天体力充沛，可以主动计划外出活动`);
             } else if (results.physical.phase === '临界期') {
-                adviceList.push(`${gender === 'female' ? '她' : '他'}体力状态不稳定，避免安排高强度活动`);
+                adviceList.push(`${pronoun}的体力状态不稳，注意劳逸结合`);
             } else {
-                adviceList.push(`${gender === 'female' ? '她' : '他'}容易疲劳，需要适当休息`);
+                adviceList.push(`${pronoun}的体力值较低，适当减少活动量`);
             }
             
             // 情绪状态建议
             if (results.emotional.phase === '高潮期') {
-                adviceList.push(`${gender === 'female' ? '她' : '他'}情绪积极，适合一起规划未来`);
+                adviceList.push(`${pronoun}今天心情很好，可以多表达爱意`);
             } else if (results.emotional.phase === '临界期') {
-                adviceList.push(`${gender === 'female' ? '她' : '他'}情绪容易波动，多给予理解和包容`);
+                adviceList.push(`${pronoun}情绪波动较大，遇事深呼吸冷静`);
             } else {
-                adviceList.push(`${gender === 'female' ? '她' : '他'}情绪低落，需要更多的关心和陪伴`);
+                adviceList.push(`${pronoun}情绪有些低落，做些开心的事转换心情`);
             }
             
             // 智力状态建议
             if (results.intellectual.phase === '高潮期') {
-                adviceList.push(`${gender === 'female' ? '她' : '他'}思维敏捷，适合一起学习新东西`);
+                adviceList.push(`${pronoun}此刻思维敏捷，是学习和计划的好时机`);
             } else if (results.intellectual.phase === '临界期') {
-                adviceList.push(`${gender === 'female' ? '她' : '他'}注意力容易分散，避免讨论复杂话题`);
+                adviceList.push(`${pronoun}注意力分散，避免处理复杂决策`);
             } else {
-                adviceList.push(`${gender === 'female' ? '她' : '他'}思考可能不够清晰，重要决策可以缓一缓`);
+                adviceList.push(`${pronoun}思考能力下降，把重要事项推迟处理`);
             }
             
-            // 通用建议
-            adviceList.push(`晚上陪${gender === 'female' ? '她' : '他'}聊聊天，分享彼此的想法`);
+            // 关系建议
+            if (results.physical.phase === '高潮期' && results.emotional.phase === '高潮期') {
+                adviceList.push(`好好把握今天的高能量状态，为对方创造惊喜`);
+            } else if (results.emotional.phase === '低潮期' && results.physical.phase === '低潮期') {
+                adviceList.push(`今天${pronoun}状态欠佳，建议选择安静的共处方式`);
+            }
             
             return adviceList;
         }
         
-        // 生成相处建议
+        // 生成给对方的建议（如何照顾对方）
+        function generatePartnerAdvice(results, gender) {
+            const adviceList = [];
+            const pronoun = gender === 'female' ? '她' : '他';
+            
+            // 体力状态建议
+            if (results.physical.phase === '高潮期') {
+                adviceList.push(`${pronoun}精力充沛，可以邀请${pronoun}一起运动`);
+            } else if (results.physical.phase === '临界期') {
+                adviceList.push(`${pronoun}体力状态不稳，避免安排高强度活动`);
+            } else {
+                adviceList.push(`${pronoun}体力不足，照顾${pronoun}多休息`);
+            }
+            
+            // 情绪状态建议
+            if (results.emotional.phase === '高潮期') {
+                adviceList.push(`${pronoun}情绪积极，适合一起畅聊梦想`);
+            } else if (results.emotional.phase === '临界期') {
+                adviceList.push(`${pronoun}容易敏感，多包容${pronoun}的情绪`);
+            } else {
+                adviceList.push(`${pronoun}心情有些低落，请给予更多关心`);
+            }
+            
+            // 智力状态建议
+            if (results.intellectual.phase === '高潮期') {
+                adviceList.push(`${pronoun}思维清晰，可以一起讨论深度话题`);
+            } else if (results.intellectual.phase === '临界期') {
+                adviceList.push(`${pronoun}注意力容易分散，沟通时保持耐心`);
+            } else {
+                adviceList.push(`${pronoun}思考力较弱，避免争论复杂问题`);
+            }
+            
+            return adviceList;
+        }
+        
+        // 生成相处建议（根据双方状态）
         function generateInteractionAdvice(femaleResults, maleResults) {
             const adviceList = [];
+            const femaleName = document.getElementById('femaleName').value || '十一';
+            const maleName = document.getElementById('maleName').value || '十九';
             
-            // 上午建议
-            if (femaleResults.physical.phase === '高潮期') {
-                adviceList.push(`<strong>上午：</strong>她体力充沛，可以让她主导活动`);
-            } else if (maleResults.physical.phase === '高潮期') {
-                adviceList.push(`<strong>上午：</strong>他体力充沛，可以让他主导活动`);
+            // 适合活动建议
+            const energyLevel = (femaleResults.physical.phase === '高潮期' ? 1 : 0) + 
+                               (maleResults.physical.phase === '高潮期' ? 1 : 0);
+            
+            if (energyLevel === 2) {
+                adviceList.push(`<strong>今日活动：</strong>双方体力充沛，适合户外运动或旅行`);
+            } else if (energyLevel === 1) {
+                adviceList.push(`<strong>今日活动：</strong>一方体力充足，可安排适度外出活动`);
             } else {
-                adviceList.push(`<strong>上午：</strong>双方体力都不算最佳，适合轻松的活动`);
+                adviceList.push(`<strong>今日活动：</strong>双方体力值较低，建议宅家休息`);
             }
             
-            // 中午建议
-            adviceList.push(`<strong>中午：</strong>一起准备午餐，享受温馨的二人时光`);
-            
-            // 下午建议
-            if (femaleResults.intellectual.phase === '高潮期') {
-                adviceList.push(`<strong>下午：</strong>她思维清晰，可以一起学习新东西`);
-            } else if (maleResults.intellectual.phase === '高潮期') {
-                adviceList.push(`<strong>下午：</strong>他思维清晰，可以一起规划未来`);
-            } else {
-                adviceList.push(`<strong>下午：</strong>双方思维都不在最佳状态，适合轻松阅读或看电影`);
+            // 情绪互动建议
+            if (femaleResults.emotional.phase === '低潮期' || maleResults.emotional.phase === '低潮期') {
+                adviceList.push(`<strong>情绪关怀：</strong>${femaleName}和${maleName}的情绪状态差异大，需要彼此体谅`);
+            } else if (femaleResults.emotional.phase === '临界期' && maleResults.emotional.phase === '临界期') {
+                adviceList.push(`<strong>情绪关怀：</strong>两人都处于情绪临界期，请多点耐心包容对方`);
+            } else if (femaleResults.emotional.phase === '高潮期' && maleResults.emotional.phase === '高潮期') {
+                adviceList.push(`<strong>情绪关怀：</strong>双方情绪都很高涨，好好享受欢乐时光吧`);
             }
             
-            // 晚上建议
-            if (femaleResults.emotional.phase === '低潮期') {
-                adviceList.push(`<strong>晚上：</strong>她情绪需要安抚，多给她温暖的拥抱`);
-            } else if (maleResults.emotional.phase === '低潮期') {
-                adviceList.push(`<strong>晚上：</strong>他情绪需要安抚，多倾听他的想法`);
+            // 深度互动建议
+            if (femaleResults.intellectual.phase === '高潮期' && maleResults.intellectual.phase === '高潮期') {
+                adviceList.push(`<strong>深度互动：</strong>两人思维都很清晰，是规划未来的好时机`);
+            } else if (femaleResults.intellectual.phase === '临界期' || maleResults.intellectual.phase === '临界期') {
+                adviceList.push(`<strong>深度互动：</strong>一方注意力容易分散，简单沟通效果更好`);
             } else {
-                adviceList.push(`<strong>晚上：</strong>一起看部温馨的电影放松心情`);
+                adviceList.push(`<strong>深度互动：</strong>双方思考能力较弱，轻松话题更适合今天`);
             }
             
-            // 特别提示
-            if (femaleResults.physical.phase === '临界期' || maleResults.physical.phase === '临界期') {
-                adviceList.push(`<strong>特别提示：</strong>关注体力临界期，避免过度劳累`);
-            } else if (femaleResults.emotional.phase === '临界期' || maleResults.emotional.phase === '临界期') {
-                adviceList.push(`<strong>特别提示：</strong>关注情绪临界期，多给予理解和包容`);
+            // 冲突解决建议
+            const criticalCount = [femaleResults.physical, femaleResults.emotional, femaleResults.intellectual, 
+                                  maleResults.physical, maleResults.emotional, maleResults.intellectual]
+                                  .filter(s => s.phase === '临界期').length;
+            
+            if (criticalCount >= 3) {
+                adviceList.push(`<strong>特别提醒：</strong>今天双方多个指标处于临界期，请多包容彼此`);
+            }
+            
+            // 夜晚建议
+            if (femaleResults.emotional.phase === '高潮期') {
+                adviceList.push(`<strong>晚间时光：</strong>${femaleName}情绪积极，适合分享心情感悟`);
+            } else if (maleResults.emotional.phase === '高潮期') {
+                adviceList.push(`<strong>晚间时光：</strong>${maleName}情绪状态很好，是倾听对方的好时机`);
             } else {
-                adviceList.push(`<strong>特别提示：</strong>今天是相处的好日子，好好享受二人时光`);
+                adviceList.push(`<strong>晚间时光：</strong>一起看电影放松心情`);
+            }
+            
+            // 总结建议
+            const compatibilityScore = (femaleResults.emotional.phase === maleResults.emotional.phase ? 1 : 0) +
+                                      (femaleResults.physical.phase === maleResults.physical.phase ? 1 : 0);
+            
+            if (compatibilityScore >= 1) {
+                adviceList.push(`<strong>每日提示：</strong>你们今天的节律很同步，好好享受彼此的陪伴吧`);
+            } else {
+                adviceList.push(`<strong>每日提示：</strong>你们今天的节律差异较大，请相互理解彼此状态`);
             }
             
             return adviceList;
@@ -892,9 +957,7 @@
             // 生成并显示建议
             const femaleAdviceList = document.getElementById('femaleAdviceList');
             femaleAdviceList.innerHTML = '';
-            
-            // 交换建议内容：女方卡片显示给男方的建议
-            generateAdvice(femaleResults, 'male').forEach(advice => {
+            generateSelfAdvice(femaleResults, 'female').forEach(advice => {
                 const li = document.createElement('li');
                 li.textContent = advice;
                 femaleAdviceList.appendChild(li);
@@ -902,9 +965,7 @@
             
             const maleAdviceList = document.getElementById('maleAdviceList');
             maleAdviceList.innerHTML = '';
-            
-            // 交换建议内容：男方卡片显示给女方的建议
-            generateAdvice(maleResults, 'female').forEach(advice => {
+            generateSelfAdvice(maleResults, 'male').forEach(advice => {
                 const li = document.createElement('li');
                 li.textContent = advice;
                 maleAdviceList.appendChild(li);
@@ -1027,14 +1088,6 @@
                     maleNameInput.value = savedData.maleName;
                 }
                 
-                document.getElementById('savedInfo').style.display = 'block';
-                
-                // 自动计算并显示结果
-                setTimeout(() => {
-                    showResults();
-                }, 500);
-            } else {
-                // 使用默认值
                 document.getElementById('savedInfo').style.display = 'block';
                 
                 // 自动计算并显示结果
