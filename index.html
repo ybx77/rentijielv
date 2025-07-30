@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>亲爱的生物节律分析 | 专属你的浪漫指南</title>
+    <title>情侣节律分析 | 专属你们的浪漫指南</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -22,19 +22,6 @@
             color: #333;
             padding: 15px;
             transition: background 1s ease;
-        }
-        
-        /* 不同情绪周期的背景色 */
-        body.high-emotion {
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb);
-        }
-        
-        body.critical-emotion {
-            background: linear-gradient(135deg, #ffdde1, #ee9ca7, #a7bfe8);
-        }
-        
-        body.low-emotion {
-            background: linear-gradient(135deg, #d4fc79, #96e6a1, #a7bfe8);
         }
         
         @keyframes gradientBG {
@@ -105,16 +92,41 @@
             gap: 15px;
         }
         
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .person-input {
+            flex: 1;
+            min-width: 280px;
+            background: rgba(248, 187, 208, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+        }
+        
+        .person-title {
+            font-size: 1.1rem;
+            color: #d81b60;
+            margin-bottom: 10px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
         .form-group {
             display: flex;
             flex-direction: column;
             gap: 5px;
+            margin-bottom: 10px;
         }
         
         label {
             font-weight: 500;
             color: #d81b60;
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
         
         input, select {
@@ -169,6 +181,29 @@
             padding: 20px;
             margin-bottom: 25px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .edit-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+        
+        .edit-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
         
         .overview-card {
@@ -178,7 +213,6 @@
             margin-bottom: 20px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
             border-left: 5px solid #f48fb1;
-            position: relative;
         }
         
         .overview-card h2 {
@@ -187,7 +221,7 @@
             margin-bottom: 15px;
         }
         
-        .biorhythm-cards {
+        .comparison-section {
             display: grid;
             grid-template-columns: 1fr;
             gap: 20px;
@@ -195,44 +229,32 @@
         }
         
         @media (min-width: 768px) {
-            .biorhythm-cards {
+            .comparison-section {
                 grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             }
         }
         
-        .rhythm-card {
+        .person-card {
             background: white;
             border-radius: 15px;
             padding: 20px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
         
-        .rhythm-card:hover {
+        .person-card:hover {
             transform: translateY(-3px);
         }
         
-        .physical {
-            border-top: 4px solid #e74c3c;
-        }
-        
-        .emotional {
-            border-top: 4px solid #9b59b6;
-        }
-        
-        .intellectual {
-            border-top: 4px solid #3498db;
-        }
-        
-        .card-header {
+        .person-header {
             display: flex;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f8bbd0;
         }
         
-        .card-icon {
+        .person-icon {
             width: 40px;
             height: 40px;
             background: rgba(231, 76, 60, 0.15);
@@ -244,44 +266,71 @@
             font-size: 1.2rem;
         }
         
-        .emotional .card-icon {
-            background: rgba(155, 89, 182, 0.15);
-            color: #9b59b6;
+        .female .person-icon {
+            background: rgba(231, 76, 60, 0.15);
+            color: #e74c3c;
         }
         
-        .intellectual .card-icon {
+        .male .person-icon {
             background: rgba(52, 152, 219, 0.15);
             color: #3498db;
         }
         
-        .card-title {
+        .person-name {
             font-size: 1.3rem;
             font-weight: 600;
             color: #d81b60;
         }
         
-        .status {
-            padding: 6px 12px;
-            border-radius: 20px;
+        .person-birthdate {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-top: 3px;
+        }
+        
+        .rhythm-status {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .status-item {
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(248, 187, 208, 0.2);
+        }
+        
+        .status-title {
             font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        
+        .status-value {
+            font-size: 1.1rem;
             font-weight: 600;
-            display: inline-block;
-            margin: 8px 0 10px;
         }
         
         .status-high {
-            background: rgba(46, 204, 113, 0.2);
             color: #27ae60;
         }
         
         .status-low {
-            background: rgba(231, 76, 60, 0.2);
-            color: #c0392b;
+            color: #e74c3c;
         }
         
         .status-critical {
-            background: rgba(243, 156, 18, 0.2);
-            color: #d35400;
+            color: #f39c12;
+        }
+        
+        .chart-container {
+            height: 180px;
+            margin: 15px 0;
+            position: relative;
         }
         
         .advice-card {
@@ -322,10 +371,18 @@
             top: 0;
         }
         
-        .chart-container {
-            height: 180px;
-            margin: 15px 0;
-            position: relative;
+        .comparison-advice {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+        
+        .comparison-advice h2 {
+            font-size: 1.4rem;
+            color: #d81b60;
+            margin-bottom: 15px;
         }
         
         footer {
@@ -356,57 +413,48 @@
             70% { box-shadow: 0 0 0 10px rgba(255, 152, 0, 0); }
             100% { box-shadow: 0 0 0 0 rgba(255, 152, 0, 0); }
         }
-        
-        /* 编辑按钮样式 */
-        .edit-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(to right, #3498db, #2980b9);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            z-index: 10;
-        }
-        
-        .edit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
     </style>
 </head>
-<body class="high-emotion">
+<body>
     <div class="container">
         <header>
-            <h1>亲爱的生物节律分析 <span class="heart">❤</span></h1>
-            <p class="subtitle">专属你的浪漫指南，让我们更懂彼此的心</p>
+            <h1>情侣节律分析 <span class="heart">❤</span></h1>
+            <p class="subtitle">专属你们的浪漫指南，让爱更懂彼此的心</p>
         </header>
         
         <section class="input-section" id="inputSection">
             <div class="input-form">
-                <div class="form-group">
-                    <label for="birthdate">你的生日：</label>
-                    <input type="date" id="birthdate" value="2003-06-11" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="gender">你是我的：</label>
-                    <select id="gender">
-                        <option value="female" selected>亲爱的女朋友</option>
-                        <option value="male">亲爱的男朋友</option>
-                    </select>
+                <div class="form-row">
+                    <div class="person-input">
+                        <div class="person-title">👩 女方信息</div>
+                        <div class="form-group">
+                            <label for="femaleName">昵称：</label>
+                            <input type="text" id="femaleName" placeholder="她的昵称" value="亲爱的">
+                        </div>
+                        <div class="form-group">
+                            <label for="femaleBirthdate">生日：</label>
+                            <input type="date" id="femaleBirthdate" value="2003-06-11" required>
+                        </div>
+                    </div>
+                    
+                    <div class="person-input">
+                        <div class="person-title">👨 男方信息</div>
+                        <div class="form-group">
+                            <label for="maleName">昵称：</label>
+                            <input type="text" id="maleName" placeholder="他的昵称" value="男朋友">
+                        </div>
+                        <div class="form-group">
+                            <label for="maleBirthdate">生日：</label>
+                            <input type="date" id="maleBirthdate" required>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="saved-info" id="savedInfo">
-                    已记住你的生日，亲爱的 ❤
+                    已记住你们的生日信息 ❤
                 </div>
                 
-                <button id="calculateBtn">看看你今天的状态</button>
+                <button id="calculateBtn">分析你们的节律状态</button>
             </div>
         </section>
         
@@ -414,141 +462,141 @@
             <button class="edit-btn" id="editBirthdayBtn">修改生日</button>
             
             <div class="overview-card">
-                <h2>亲爱的状态概览</h2>
+                <h2>情侣节律对比概览</h2>
                 <div id="overviewContent">
-                    <p><strong>你的生日：</strong><span id="displayBirthdate">2003年6月11日</span></p>
-                    <p>根据分析，你今天的状态是：</p>
-                    <p><strong>体力：</strong><span id="physicalStatus">高潮期</span> | 
-                       <strong>心情：</strong><span id="emotionalStatus">低潮期</span> | 
-                       <strong>思维：</strong><span id="intellectualStatus">高潮期</span></p>
-                    <p>📅 今天是：<span id="targetDate"></span></p>
+                    <p>今天是：<span id="targetDate"></span></p>
                 </div>
             </div>
             
-            <div class="biorhythm-cards">
-                <div class="rhythm-card physical">
-                    <div class="card-header">
-                        <div class="card-icon">💪</div>
-                        <h3 class="card-title">你的体力状态</h3>
+            <div class="comparison-section">
+                <div class="person-card female">
+                    <div class="person-header">
+                        <div class="person-icon female">👩</div>
+                        <div>
+                            <div class="person-name" id="femaleDisplayName">亲爱的</div>
+                            <div class="person-birthdate" id="femaleDisplayBirthdate">2003年6月11日</div>
+                        </div>
                     </div>
                     
-                    <div class="status" id="physicalStatusBadge">高潮期</div>
-                    <p>当前处于<span id="physicalPhase">高潮期</span>第<span id="physicalDay">9</span>天 (23天周期)</p>
+                    <div class="rhythm-status">
+                        <div class="status-item">
+                            <div class="status-title">体力状态</div>
+                            <div class="status-value status-high" id="femalePhysicalStatus">高潮期</div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-title">情绪状态</div>
+                            <div class="status-value status-low" id="femaleEmotionalStatus">低潮期</div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-title">智力状态</div>
+                            <div class="status-value status-high" id="femaleIntellectualStatus">高潮期</div>
+                        </div>
+                    </div>
                     
                     <div class="chart-container">
-                        <canvas id="physicalChart"></canvas>
+                        <canvas id="femaleChart"></canvas>
                     </div>
                     
                     <div class="advice-card">
-                        <h3>💌 给你的小建议</h3>
+                        <h3>💌 给她的建议</h3>
                         <ul class="advice-list">
-                            <li>今天体力充沛呢，要不要一起去运动或者爬山？</li>
-                            <li>看到你活力满满的样子，我的心也跟着跳动呢</li>
-                            <li>不过要记得适当休息，别让自己太累哦</li>
-                            <li>过两天体力可能会下降，那时让我来照顾你吧</li>
+                            <li>今天她体力充沛，可以一起运动或户外活动</li>
+                            <li>情绪可能有些低落，给她一个温暖的拥抱</li>
+                            <li>思维清晰，适合一起学习新东西</li>
+                            <li>晚上陪她看部温馨的电影放松心情</li>
                         </ul>
                     </div>
                 </div>
                 
-                <div class="rhythm-card emotional">
-                    <div class="card-header">
-                        <div class="card-icon">😊</div>
-                        <h3 class="card-title">你的心情状态</h3>
+                <div class="person-card male">
+                    <div class="person-header">
+                        <div class="person-icon male">👨</div>
+                        <div>
+                            <div class="person-name" id="maleDisplayName">男朋友</div>
+                            <div class="person-birthdate" id="maleDisplayBirthdate">1998年3月15日</div>
+                        </div>
                     </div>
                     
-                    <div class="status" id="emotionalStatusBadge">低潮期</div>
-                    <p>当前处于<span id="emotionalPhase">低潮期</span>第<span id="emotionalDay">22</span>天 (28天周期)</p>
+                    <div class="rhythm-status">
+                        <div class="status-item">
+                            <div class="status-title">体力状态</div>
+                            <div class="status-value status-critical" id="malePhysicalStatus">临界期</div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-title">情绪状态</div>
+                            <div class="status-value status-high" id="maleEmotionalStatus">高潮期</div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-title">智力状态</div>
+                            <div class="status-value status-low" id="maleIntellectualStatus">低潮期</div>
+                        </div>
+                    </div>
                     
                     <div class="chart-container">
-                        <canvas id="emotionalChart"></canvas>
+                        <canvas id="maleChart"></canvas>
                     </div>
                     
                     <div class="advice-card">
-                        <h3>💌 给你的小建议</h3>
+                        <h3>💌 给他的建议</h3>
                         <ul class="advice-list">
-                            <li>今天心情可能有点低落，让我给你一个温暖的拥抱吧</li>
-                            <li>要不要一起看部温馨的电影？我会一直陪着你</li>
-                            <li>有什么心事都可以告诉我，我永远是你最忠实的听众</li>
-                            <li>记得给自己一点独处的时间，我会安静地守护你</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="rhythm-card intellectual">
-                    <div class="card-header">
-                        <div class="card-icon">🧠</div>
-                        <h3 class="card-title">你的思维状态</h3>
-                    </div>
-                    
-                    <div class="status" id="intellectualStatusBadge">高潮期</div>
-                    <p>当前处于<span id="intellectualPhase">高潮期</span>第<span id="intellectualDay">2</span>天 (33天周期)</p>
-                    
-                    <div class="chart-container">
-                        <canvas id="intellectualChart"></canvas>
-                    </div>
-                    
-                    <div class="advice-card">
-                        <h3>💌 给你的小建议</h3>
-                        <ul class="advice-list">
-                            <li>今天思维特别清晰呢，有什么创意想法都可以告诉我</li>
-                            <li>要不要一起学习新东西？我会一直陪在你身边</li>
-                            <li>你的聪明才智总是让我着迷</li>
-                            <li>记得把重要的事情安排在今天哦</li>
+                            <li>今天他体力可能不稳定，避免剧烈运动</li>
+                            <li>情绪很好，适合一起规划未来</li>
+                            <li>思维可能不够清晰，重要决策可以缓一缓</li>
+                            <li>晚上陪他聊聊天，分享彼此的想法</li>
                         </ul>
                     </div>
                 </div>
             </div>
             
-            <div class="overview-card">
-                <h2>📅 今天怎么爱你最合适</h2>
+            <div class="comparison-advice">
+                <h2>📅 今天怎么相处最合适</h2>
                 <ul class="advice-list">
-                    <li><strong>上午：</strong>陪你一起处理重要的事情，做你最贴心的助手</li>
-                    <li><strong>中午：</strong>为你准备爱心午餐，让你吃得开心又健康</li>
-                    <li><strong>下午：</strong>安静地陪在你身边，给你温柔的陪伴</li>
-                    <li><strong>晚上：</strong>给你一个温暖的拥抱，听你分享今天的心情</li>
-                    <li><strong>特别提示：</strong>过两天你体力可能会下降，那时我会好好照顾你</li>
+                    <li><strong>上午：</strong>她体力充沛，可以让她主导活动；他情绪高涨，多倾听他的想法</li>
+                    <li><strong>中午：</strong>一起准备午餐，享受温馨的二人时光</li>
+                    <li><strong>下午：</strong>她思维清晰，可以一起学习；他需要适当休息</li>
+                    <li><strong>晚上：</strong>她情绪需要安抚，多给她拥抱；他思维不太清晰，避免讨论复杂话题</li>
+                    <li><strong>特别提示：</strong>关注她即将到来的体力临界日，那时需要你更多的照顾</li>
                 </ul>
             </div>
         </section>
         
         <footer>
-            <p>专属你的生物节律分析 | 因为爱你，所以更懂你</p>
-            <p>© 2025 为你定制 | 你的生日已保存在我心里</p>
+            <p>专属你们的情侣节律分析 | 因为相爱，所以更懂彼此</p>
+            <p>© 2025 为爱定制 | 你们的生日已保存在我心里</p>
         </footer>
     </div>
     
     <script>
         // 存储图表实例
-        let physicalChartInstance = null;
-        let emotionalChartInstance = null;
-        let intellectualChartInstance = null;
+        let femaleChartInstance = null;
+        let maleChartInstance = null;
         
         // 初始化图表
-        function renderCharts(results) {
-            // 体力图表
-            const physicalCtx = document.getElementById('physicalChart').getContext('2d');
+        function renderCharts(femaleResults, maleResults) {
+            // 女性图表
+            const femaleCtx = document.getElementById('femaleChart').getContext('2d');
             
             // 销毁旧图表实例
-            if (physicalChartInstance) {
-                physicalChartInstance.destroy();
+            if (femaleChartInstance) {
+                femaleChartInstance.destroy();
             }
             
-            // 获取体力状态值
-            const physicalData = [0.01, 0.25, 0.48, 0.68, 0.84, 0.95, 0.99, 0.95, 0.84, 0.68, 0.48, 0.25, 0, -0.25, -0.48, -0.68, -0.84, -0.95, -0.99, -0.95, -0.84, -0.68, -0.48];
-            const physicalValue = physicalData[results.physical.day - 1] || 0;
-            
-            physicalChartInstance = new Chart(physicalCtx, {
+            femaleChartInstance = new Chart(femaleCtx, {
                 type: 'line',
                 data: {
-                    labels: Array.from({length: 23}, (_, i) => i+1),
+                    labels: ['体力', '情绪', '智力'],
                     datasets: [{
-                        label: '体力状态',
-                        data: physicalData,
-                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                        label: '状态值',
+                        data: [
+                            getStatusValue(femaleResults.physical.phase),
+                            getStatusValue(femaleResults.emotional.phase),
+                            getStatusValue(femaleResults.intellectual.phase)
+                        ],
+                        backgroundColor: 'rgba(231, 76, 60, 0.2)',
                         borderColor: '#e74c3c',
                         borderWidth: 3,
                         pointBackgroundColor: '#e74c3c',
-                        pointRadius: 3,
+                        pointRadius: 8,
                         tension: 0.4
                     }]
                 },
@@ -559,110 +607,50 @@
                         y: {
                             min: -1.2,
                             max: 1.2,
-                            display: false
-                        },
-                        x: {
-                            grid: {
-                                display: false
+                            ticks: {
+                                stepSize: 0.5
                             }
                         }
                     },
                     plugins: {
                         legend: {
                             display: false
-                        }
-                    },
-                    animation: {
-                        duration: 2000,
-                        easing: 'easeOutQuart'
-                    }
-                }
-            });
-            
-            // 添加当前点标注
-            addCurrentPoint('physicalChart', results.physical.day, physicalValue, getStatusColor(results.physical.phase));
-            
-            // 情绪图表
-            const emotionalCtx = document.getElementById('emotionalChart').getContext('2d');
-            
-            // 销毁旧图表实例
-            if (emotionalChartInstance) {
-                emotionalChartInstance.destroy();
-            }
-            
-            // 获取情绪状态值
-            const emotionalData = [0, 0.22, 0.43, 0.62, 0.78, 0.9, 0.97, 0.97, 0.9, 0.78, 0.62, 0.43, 0.22, 0, -0.22, -0.43, -0.62, -0.78, -0.9, -0.97, -0.97, -0.9, -0.78, -0.62, -0.43, -0.22, 0, 0.22];
-            const emotionalValue = emotionalData[results.emotional.day - 1] || 0;
-            
-            emotionalChartInstance = new Chart(emotionalCtx, {
-                type: 'line',
-                data: {
-                    labels: Array.from({length: 28}, (_, i) => i+1),
-                    datasets: [{
-                        label: '情绪状态',
-                        data: emotionalData,
-                        backgroundColor: 'rgba(155, 89, 182, 0.1)',
-                        borderColor: '#9b59b6',
-                        borderWidth: 3,
-                        pointBackgroundColor: '#9b59b6',
-                        pointRadius: 3,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            min: -1.2,
-                            max: 1.2,
-                            display: false
                         },
-                        x: {
-                            grid: {
-                                display: false
+                        title: {
+                            display: true,
+                            text: '她的节律状态',
+                            font: {
+                                size: 16
                             }
                         }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    animation: {
-                        duration: 2000,
-                        easing: 'easeOutQuart'
                     }
                 }
             });
             
-            // 添加当前点标注
-            addCurrentPoint('emotionalChart', results.emotional.day, emotionalValue, getStatusColor(results.emotional.phase));
-            
-            // 智力图表
-            const intellectualCtx = document.getElementById('intellectualChart').getContext('2d');
+            // 男性图表
+            const maleCtx = document.getElementById('maleChart').getContext('2d');
             
             // 销毁旧图表实例
-            if (intellectualChartInstance) {
-                intellectualChartInstance.destroy();
+            if (maleChartInstance) {
+                maleChartInstance.destroy();
             }
             
-            // 获取智力状态值
-            const intellectualData = [0, 0.19, 0.37, 0.54, 0.69, 0.81, 0.9, 0.96, 0.98, 0.96, 0.9, 0.81, 0.69, 0.54, 0.37, 0.19, 0, -0.19, -0.37, -0.54, -0.69, -0.81, -0.9, -0.96, -0.98, -0.96, -0.9, -0.81, -0.69, -0.54, -0.37, -0.19, 0];
-            const intellectualValue = intellectualData[results.intellectual.day - 1] || 0;
-            
-            intellectualChartInstance = new Chart(intellectualCtx, {
+            maleChartInstance = new Chart(maleCtx, {
                 type: 'line',
                 data: {
-                    labels: Array.from({length: 33}, (_, i) => i+1),
+                    labels: ['体力', '情绪', '智力'],
                     datasets: [{
-                        label: '智力状态',
-                        data: intellectualData,
-                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        label: '状态值',
+                        data: [
+                            getStatusValue(maleResults.physical.phase),
+                            getStatusValue(maleResults.emotional.phase),
+                            getStatusValue(maleResults.intellectual.phase)
+                        ],
+                        backgroundColor: 'rgba(52, 152, 219, 0.2)',
                         borderColor: '#3498db',
                         borderWidth: 3,
                         pointBackgroundColor: '#3498db',
-                        pointRadius: 3,
+                        pointRadius: 8,
                         tension: 0.4
                     }]
                 },
@@ -673,90 +661,44 @@
                         y: {
                             min: -1.2,
                             max: 1.2,
-                            display: false
-                        },
-                        x: {
-                            grid: {
-                                display: false
+                            ticks: {
+                                stepSize: 0.5
                             }
                         }
                     },
                     plugins: {
                         legend: {
                             display: false
+                        },
+                        title: {
+                            display: true,
+                            text: '他的节律状态',
+                            font: {
+                                size: 16
+                            }
                         }
-                    },
-                    animation: {
-                        duration: 2000,
-                        easing: 'easeOutQuart'
                     }
                 }
             });
-            
-            // 添加当前点标注
-            addCurrentPoint('intellectualChart', results.intellectual.day, intellectualValue, getStatusColor(results.intellectual.phase));
         }
         
-        // 添加当前点标注 - 修复版
-        function addCurrentPoint(canvasId, day, value, color) {
-            const canvas = document.getElementById(canvasId);
-            const chart = Chart.getChart(canvas);
-            
-            if (!chart) return;
-            
-            // 获取点的位置
-            const meta = chart.getDatasetMeta(0);
-            const point = meta.data[day - 1];
-            
-            if (point) {
-                const x = point.x;
-                const y = point.y;
-                
-                // 创建标注点
-                const pointElement = document.createElement('div');
-                pointElement.className = 'current-point';
-                pointElement.style.left = `${x}px`;
-                pointElement.style.top = `${y}px`;
-                pointElement.style.backgroundColor = color;
-                pointElement.style.borderColor = color === '#f39c12' ? '#d35400' : '#ff9800';
-                
-                // 添加到图表容器
-                const container = canvas.parentElement;
-                
-                // 移除旧的标注点
-                const oldPoints = container.querySelectorAll('.current-point');
-                oldPoints.forEach(point => point.remove());
-                
-                container.appendChild(pointElement);
-                
-                // 添加状态值标签
-                const valueLabel = document.createElement('div');
-                valueLabel.className = 'value-label';
-                valueLabel.textContent = value.toFixed(2);
-                valueLabel.style.position = 'absolute';
-                valueLabel.style.left = `${x}px`;
-                valueLabel.style.top = `${y - 25}px`;
-                valueLabel.style.transform = 'translateX(-50%)';
-                valueLabel.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-                valueLabel.style.padding = '2px 6px';
-                valueLabel.style.borderRadius = '10px';
-                valueLabel.style.fontSize = '0.8rem';
-                valueLabel.style.fontWeight = 'bold';
-                valueLabel.style.color = color;
-                valueLabel.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
-                valueLabel.style.zIndex = '10';
-                
-                container.appendChild(valueLabel);
+        // 获取状态对应的数值
+        function getStatusValue(phase) {
+            switch(phase) {
+                case '高潮期': return 1.0;
+                case '临界期': return 0;
+                case '低潮期': return -1.0;
+                default: return 0;
             }
         }
         
-        // 获取状态对应的颜色
-        function getStatusColor(phase) {
+        // 获取状态对应的颜色类
+        function getStatusClass(phase) {
             switch(phase) {
-                case '高潮期': return '#27ae60';
-                case '临界期': return '#f39c12';
-                case '低潮期': return '#e74c3c';
-                default: return '#3498db';
+                case '高潮期': return 'status-high';
+                case '临界期': return 'status-critical';
+                case '低潮期': return 'status-low';
+                default: return '';
             }
         }
         
@@ -799,51 +741,46 @@
         }
         
         // 更新状态显示
-        function updateStatusDisplay(results) {
-            // 体力状态
-            document.getElementById('physicalDay').textContent = results.physical.day;
-            document.getElementById('physicalPhase').textContent = results.physical.phase;
-            document.getElementById('physicalStatus').textContent = results.physical.phase;
-            document.getElementById('physicalStatusBadge').textContent = results.physical.phase;
-            document.getElementById('physicalStatusBadge').className = 'status ' + 
-                (results.physical.phase === '高潮期' ? 'status-high' : 
-                 results.physical.phase === '临界期' ? 'status-critical' : 'status-low');
+        function updateStatusDisplay(femaleResults, maleResults) {
+            // 更新女方信息
+            const femaleName = document.getElementById('femaleName').value || '亲爱的';
+            const femaleBirthdate = document.getElementById('femaleBirthdate').value;
             
-            // 情绪状态
-            document.getElementById('emotionalDay').textContent = results.emotional.day;
-            document.getElementById('emotionalPhase').textContent = results.emotional.phase;
-            document.getElementById('emotionalStatus').textContent = results.emotional.phase;
-            document.getElementById('emotionalStatusBadge').textContent = results.emotional.phase;
-            document.getElementById('emotionalStatusBadge').className = 'status ' + 
-                (results.emotional.phase === '高潮期' ? 'status-high' : 
-                 results.emotional.phase === '临界期' ? 'status-critical' : 'status-low');
+            document.getElementById('femaleDisplayName').textContent = femaleName;
+            document.getElementById('femaleDisplayBirthdate').textContent = formatDate(femaleBirthdate);
             
-            // 智力状态
-            document.getElementById('intellectualDay').textContent = results.intellectual.day;
-            document.getElementById('intellectualPhase').textContent = results.intellectual.phase;
-            document.getElementById('intellectualStatus').textContent = results.intellectual.phase;
-            document.getElementById('intellectualStatusBadge').textContent = results.intellectual.phase;
-            document.getElementById('intellectualStatusBadge').className = 'status ' + 
-                (results.intellectual.phase === '高潮期' ? 'status-high' : 
-                 results.intellectual.phase === '临界期' ? 'status-critical' : 'status-low');
+            document.getElementById('femalePhysicalStatus').textContent = femaleResults.physical.phase;
+            document.getElementById('femalePhysicalStatus').className = 'status-value ' + getStatusClass(femaleResults.physical.phase);
             
-            // 根据情绪状态更新背景
-            document.body.className = '';
-            if (results.emotional.phase === '高潮期') {
-                document.body.classList.add('high-emotion');
-            } else if (results.emotional.phase === '临界期') {
-                document.body.classList.add('critical-emotion');
-            } else {
-                document.body.classList.add('low-emotion');
-            }
+            document.getElementById('femaleEmotionalStatus').textContent = femaleResults.emotional.phase;
+            document.getElementById('femaleEmotionalStatus').className = 'status-value ' + getStatusClass(femaleResults.emotional.phase);
             
-            // 更新生日显示
-            const birthdate = document.getElementById('birthdate').value;
-            const formattedBirthdate = formatDate(birthdate);
-            document.getElementById('displayBirthdate').textContent = formattedBirthdate;
+            document.getElementById('femaleIntellectualStatus').textContent = femaleResults.intellectual.phase;
+            document.getElementById('femaleIntellectualStatus').className = 'status-value ' + getStatusClass(femaleResults.intellectual.phase);
+            
+            // 更新男方信息
+            const maleName = document.getElementById('maleName').value || '男朋友';
+            const maleBirthdate = document.getElementById('maleBirthdate').value;
+            
+            document.getElementById('maleDisplayName').textContent = maleName;
+            document.getElementById('maleDisplayBirthdate').textContent = formatDate(maleBirthdate);
+            
+            document.getElementById('malePhysicalStatus').textContent = maleResults.physical.phase;
+            document.getElementById('malePhysicalStatus').className = 'status-value ' + getStatusClass(maleResults.physical.phase);
+            
+            document.getElementById('maleEmotionalStatus').textContent = maleResults.emotional.phase;
+            document.getElementById('maleEmotionalStatus').className = 'status-value ' + getStatusClass(maleResults.emotional.phase);
+            
+            document.getElementById('maleIntellectualStatus').textContent = maleResults.intellectual.phase;
+            document.getElementById('maleIntellectualStatus').className = 'status-value ' + getStatusClass(maleResults.intellectual.phase);
+            
+            // 设置目标日期
+            const now = new Date();
+            const formattedDate = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+            document.getElementById('targetDate').textContent = formattedDate;
             
             // 渲染图表
-            renderCharts(results);
+            renderCharts(femaleResults, maleResults);
         }
         
         // 格式化日期为 "YYYY年MM月DD日"
@@ -853,38 +790,48 @@
         }
         
         // 保存生日设置
-        function saveBirthday(date) {
-            localStorage.setItem('biorhythm_birthdate', date);
-            localStorage.setItem('biorhythm_last_saved', new Date().toISOString());
+        function saveBirthdays() {
+            const femaleBirthdate = document.getElementById('femaleBirthdate').value;
+            const maleBirthdate = document.getElementById('maleBirthdate').value;
+            const femaleName = document.getElementById('femaleName').value || '亲爱的';
+            const maleName = document.getElementById('maleName').value || '男朋友';
+            
+            localStorage.setItem('female_birthdate', femaleBirthdate);
+            localStorage.setItem('male_birthdate', maleBirthdate);
+            localStorage.setItem('female_name', femaleName);
+            localStorage.setItem('male_name', maleName);
+            localStorage.setItem('last_saved', new Date().toISOString());
         }
         
         // 获取保存的生日
-        function getSavedBirthday() {
-            return localStorage.getItem('biorhythm_birthdate');
+        function getSavedBirthdays() {
+            return {
+                femaleBirthdate: localStorage.getItem('female_birthdate'),
+                maleBirthdate: localStorage.getItem('male_birthdate'),
+                femaleName: localStorage.getItem('female_name'),
+                maleName: localStorage.getItem('male_name')
+            };
         }
         
         // 显示结果
         function showResults() {
-            const birthdate = document.getElementById('birthdate').value;
+            const femaleBirthdate = document.getElementById('femaleBirthdate').value;
+            const maleBirthdate = document.getElementById('maleBirthdate').value;
             
-            if (!birthdate) {
-                alert('请输入你的生日，亲爱的');
+            if (!femaleBirthdate || !maleBirthdate) {
+                alert('请填写双方的生日信息');
                 return;
             }
             
             // 保存生日
-            saveBirthday(birthdate);
+            saveBirthdays();
             
             // 计算生物节律
-            const results = calculateBiorhythm(birthdate);
+            const femaleResults = calculateBiorhythm(femaleBirthdate);
+            const maleResults = calculateBiorhythm(maleBirthdate);
             
             // 更新UI显示
-            updateStatusDisplay(results);
-            
-            // 设置目标日期
-            const now = new Date();
-            const formattedDate = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
-            document.getElementById('targetDate').textContent = formattedDate;
+            updateStatusDisplay(femaleResults, maleResults);
             
             // 显示结果区域
             document.getElementById('resultsSection').style.display = 'block';
@@ -923,22 +870,41 @@
             editBtn.addEventListener('click', editBirthday);
             
             // 检查是否有保存的生日
-            const savedBirthdate = getSavedBirthday();
-            const birthdateInput = document.getElementById('birthdate');
+            const savedData = getSavedBirthdays();
+            const femaleBirthdateInput = document.getElementById('femaleBirthdate');
+            const maleBirthdateInput = document.getElementById('maleBirthdate');
+            const femaleNameInput = document.getElementById('femaleName');
+            const maleNameInput = document.getElementById('maleName');
             
-            if (savedBirthdate) {
-                birthdateInput.value = savedBirthdate;
+            if (savedData.femaleBirthdate && savedData.maleBirthdate) {
+                femaleBirthdateInput.value = savedData.femaleBirthdate;
+                maleBirthdateInput.value = savedData.maleBirthdate;
+                
+                if (savedData.femaleName) {
+                    femaleNameInput.value = savedData.femaleName;
+                }
+                
+                if (savedData.maleName) {
+                    maleNameInput.value = savedData.maleName;
+                }
+                
                 document.getElementById('savedInfo').style.display = 'block';
                 
                 // 自动计算并显示结果
                 setTimeout(() => {
                     showResults();
                 }, 500);
+            } else {
+                // 设置默认男方生日为当前日期减去5年
+                const now = new Date();
+                const fiveYearsAgo = new Date(now.getFullYear() - 5, now.getMonth(), now.getDate());
+                maleBirthdateInput.value = fiveYearsAgo.toISOString().split('T')[0];
             }
             
             // 设置当前日期为目标日期
             const now = new Date();
-            birthdateInput.max = now.toISOString().split('T')[0];
+            femaleBirthdateInput.max = now.toISOString().split('T')[0];
+            maleBirthdateInput.max = now.toISOString().split('T')[0];
         });
     </script>
 </body>
