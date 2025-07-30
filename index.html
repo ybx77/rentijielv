@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人体节律分析器 | 掌控你的生物节律</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            color: #333;
+            padding: 15px;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 15px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #1a2a6c, #b21f1f, #fdbb2d);
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            color: #2c3e50;
+            font-weight: 400;
+            max-width: 700px;
+            margin: 0 auto 10px;
+        }
+        
+        .input-section {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .input-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        label {
+            font-weight: 500;
+            color: #2c3e50;
+            font-size: 1rem;
+        }
+        
+        input, select {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Noto Sans SC', sans-serif;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+        }
+        
+        button {
+            background: linear-gradient(to right, #1a2a6c, #b21f1f);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            font-family: 'Noto Sans SC', sans-serif;
+            margin-top: 8px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+        }
+        
+        .saved-info {
+            background: rgba(46, 204, 113, 0.15);
+            color: #27ae60;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 10px;
+            display: none;
+            font-size: 0.9rem;
+        }
+        
+        .results-section {
+            display: none;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .overview-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #3498db;
+        }
+        
+        .overview-card h2 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .biorhythm-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .rhythm-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .rhythm-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .physical {
+            border-top: 4px solid #e74c3c;
+        }
+        
+        .emotional {
+            border-top: 4px solid #9b59b6;
+        }
+        
+        .intellectual {
+            border-top: 4px solid #3498db;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(231, 76, 60, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+        
+        .emotional .card-icon {
+            background: rgba(155, 89, 182, 0.15);
+            color: #9b59b6;
+        }
+        
+        .intellectual .card-icon {
+            background: rgba(52, 152, 219, 0.15);
+            color: #3498db;
+        }
+        
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+            margin: 8px 0 10px;
+        }
+        
+        .status-high {
+            background: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+        }
+        
+        .status-low {
+            background: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+        }
+        
+        .status-critical {
+            background: rgba(243, 156, 18, 0.2);
+            color: #d35400;
+        }
+        
+        .advice-card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-top: 12px;
+        }
+        
+        .advice-card h3 {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .advice-list {
+            padding-left: 18px;
+        }
+        
+        .advice-list li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+            position: relative;
+            padding-left: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .advice-list li:before {
+            content: "•";
+            color: #3498db;
+            font-size: 1.3rem;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+        
+        .chart-container {
+            height: 180px;
+            margin: 15px 0;
+            position: relative;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 15px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+        }
+        
+        /* 移动端优化 */
+        @media (min-width: 768px) {
+            .biorhythm-cards {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>人体节律分析器</h1>
+            <p class="subtitle">了解你的体力、情绪与智力周期，优化每日安排</p>
+        </header>
+        
+        <section class="input-section">
+            <div class="input-form">
+                <div class="form-group">
+                    <label for="birthdate">出生日期：</label>
+                    <input type="date" id="birthdate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="gender">性别：</label>
+                    <select id="gender">
+                        <option value="female" selected>女性</option>
+                        <option value="male">男性</option>
+                    </select>
+                </div>
+                
+                <div class="saved-info" id="savedInfo">
+                    已载入保存的生日设置
+                </div>
+                
+                <button id="calculateBtn">分析我的节律状态</button>
+            </div>
+        </section>
+        
+        <section class="results-section" id="resultsSection">
+            <div class="overview-card">
+                <h2>人体节律分析概览</h2>
+                <div id="overviewContent">
+                    <p>根据分析，您目前处于以下生物节律状态：</p>
+                    <p><strong>体力周期：</strong><span id="physicalStatus">高潮期</span> | 
+                       <strong>情绪周期：</strong><span id="emotionalStatus">低潮期</span> | 
+                       <strong>智力周期：</strong><span id="intellectualStatus">高潮期</span></p>
+                    <p>📅 目标日期：<span id="targetDate"></span></p>
+                </div>
+            </div>
+            
+            <div class="biorhythm-cards">
+                <div class="rhythm-card physical">
+                    <div class="card-header">
+                        <div class="card-icon">💪</div>
+                        <h3 class="card-title">体力周期</h3>
+                    </div>
+                    
+                    <div class="status" id="physicalStatusBadge">高潮期</div>
+                    <p>当前处于<span id="physicalPhase">高潮期</span>第<span id="physicalDay">9</span>天 (23天周期)</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="physicalChart"></canvas>
+                    </div>
+                    
+                    <div class="advice-card">
+                        <h3>💡 行动建议</h3>
+                        <ul class="advice-list">
+                            <li>充分利用充沛体能安排重要会议或高强度工作</li>
+                            <li>进行运动锻炼或户外活动，促进新陈代谢</li>
+                            <li>合理分配能量，避免过度透支体力</li>
+                            <li>关注临界日预警（将在第11-12天出现）</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="rhythm-card emotional">
+                    <div class="card-header">
+                        <div class="card-icon">😊</div>
+                        <h3 class="card-title">情绪周期</h3>
+                    </div>
+                    
+                    <div class="status" id="emotionalStatusBadge">低潮期</div>
+                    <p>当前处于<span id="emotionalPhase">低潮期</span>第<span id="emotionalDay">22</span>天 (28天周期)</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="emotionalChart"></canvas>
+                    </div>
+                    
+                    <div class="advice-card">
+                        <h3>💡 行动建议</h3>
+                        <ul class="advice-list">
+                            <li>避免做重大情感决策或敏感话题讨论</li>
+                            <li>选择温馨读物或喜剧电影放松心情</li>
+                            <li>尝试冥想练习平衡内在情绪状态</li>
+                            <li>减少社交负担，给自己适当的独处空间</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="rhythm-card intellectual">
+                    <div class="card-header">
+                        <div class="card-icon">🧠</div>
+                        <h3 class="card-title">智力周期</h3>
+                    </div>
+                    
+                    <div class="status" id="intellectualStatusBadge">高潮期</div>
+                    <p>当前处于<span id="intellectualPhase">高潮期</span>第<span id="intellectualDay">2</span>天 (33天周期)</p>
+                    
+                    <div class="chart-container">
+                        <canvas id="intellectualChart"></canvas>
+                    </div>
+                    
+                    <div class="advice-card">
+                        <h3>💡 行动建议</h3>
+                        <ul class="advice-list">
+                            <li>安排重要学习任务和复杂问题的解决</li>
+                            <li>进行头脑风暴或创作工作，产出优质创意</li>
+                            <li>学习新技能或参加培训，效率将事半功倍</li>
+                            <li>利用良好状态做出战略决策和长期规划</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overview-card">
+                <h2>📅 今日最佳行动指南</h2>
+                <ul class="advice-list">
+                    <li><strong>上午：</strong>充分利用智力高峰期处理最重要的工作任务</li>
+                    <li><strong>中午：</strong>确保营养午餐并有20分钟午休恢复体力</li>
+                    <li><strong>下午：</strong>处理常规事务，避免复杂的人际沟通</li>
+                    <li><strong>晚上：</strong>适度放松，进行轻松活动避免情绪负荷</li>
+                    <li><strong>特别提示：</strong>关注体力即将进入临界日，注意合理安排工作节奏</li>
+                </ul>
+            </div>
+        </section>
+        
+        <footer>
+            <p>人体生物节律说明：本分析基于体力23天、情绪28天、智力33天的周期理论</p>
+            <p>© 2025 人体节律分析器 | 您的生日已本地保存</p>
+        </footer>
+    </div>
+    
+    <script>
+        // 初始化图表
+        function renderCharts() {
+            // 体力图表
+            const physicalCtx = document.getElementById('physicalChart').getContext('2d');
+            const physicalChart = new Chart(physicalCtx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 23}, (_, i) => i+1),
+                    datasets: [{
+                        label: '体力状态',
+                        data: [0.01, 0.25, 0.48, 0.68, 0.84, 0.95, 0.99, 0.95, 0.84, 0.68, 0.48, 0.25, 0, -0.25, -0.48, -0.68, -0.84, -0.95, -0.99, -0.95, -0.84, -0.68, -0.48],
+                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                        borderColor: '#e74c3c',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#e74c3c',
+                        pointRadius: 3,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: -1.2,
+                            max: 1.2,
+                            display: false
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            // 情绪图表
+            const emotionalCtx = document.getElementById('emotionalChart').getContext('2d');
+            const emotionalChart = new Chart(emotionalCtx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 28}, (_, i) => i+1),
+                    datasets: [{
+                        label: '情绪状态',
+                        data: [0, 0.22, 0.43, 0.62, 0.78, 0.9, 0.97, 0.97, 0.9, 0.78, 0.62, 0.43, 0.22, 0, -0.22, -0.43, -0.62, -0.78, -0.9, -0.97, -0.97, -0.9, -0.78, -0.62, -0.43, -0.22, 0, 0.22],
+                        backgroundColor: 'rgba(155, 89, 182, 0.1)',
+                        borderColor: '#9b59b6',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#9b59b6',
+                        pointRadius: 3,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: -1.2,
+                            max: 1.2,
+                            display: false
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            // 智力图表
+            const intellectualCtx = document.getElementById('intellectualChart').getContext('2d');
+            const intellectualChart = new Chart(intellectualCtx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 33}, (_, i) => i+1),
+                    datasets: [{
+                        label: '智力状态',
+                        data: [0, 0.19, 0.37, 0.54, 0.69, 0.81, 0.9, 0.96, 0.98, 0.96, 0.9, 0.81, 0.69, 0.54, 0.37, 0.19, 0, -0.19, -0.37, -0.54, -0.69, -0.81, -0.9, -0.96, -0.98, -0.96, -0.9, -0.81, -0.69, -0.54, -0.37, -0.19, 0],
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        borderColor: '#3498db',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#3498db',
+                        pointRadius: 3,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: -1.2,
+                            max: 1.2,
+                            display: false
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 计算生物节律
+        function calculateBiorhythm(birthdate) {
+            const oneDay = 24 * 60 * 60 * 1000;
+            const birthDate = new Date(birthdate);
+            const today = new Date();
+            
+            // 计算天数差
+            const diffDays = Math.round(Math.abs((birthDate.getTime() - today.getTime()) / oneDay));
+            
+            // 各周期计算
+            const physicalCycle = diffDays % 23;
+            const emotionalCycle = diffDays % 28;
+            const intellectualCycle = diffDays % 33;
+            
+            // 周期状态判断
+            function getPhase(day, totalDays) {
+                const quarter = Math.floor(totalDays / 4);
+                if (day <= quarter) return "高潮期";
+                if (day > quarter && day <= quarter * 3) return "临界期";
+                return "低潮期";
+            }
+            
+            return {
+                physical: {
+                    day: physicalCycle,
+                    phase: getPhase(physicalCycle, 23)
+                },
+                emotional: {
+                    day: emotionalCycle,
+                    phase: getPhase(emotionalCycle, 28)
+                },
+                intellectual: {
+                    day: intellectualCycle,
+                    phase: getPhase(intellectualCycle, 33)
+                }
+            };
+        }
+        
+        // 更新状态显示
+        function updateStatusDisplay(results) {
+            // 体力状态
+            document.getElementById('physicalDay').textContent = results.physical.day;
+            document.getElementById('physicalPhase').textContent = results.physical.phase;
+            document.getElementById('physicalStatus').textContent = results.physical.phase;
+            document.getElementById('physicalStatusBadge').textContent = results.physical.phase;
+            document.getElementById('physicalStatusBadge').className = 'status ' + 
+                (results.physical.phase === '高潮期' ? 'status-high' : 
+                 results.physical.phase === '临界期' ? 'status-critical' : 'status-low');
+            
+            // 情绪状态
+            document.getElementById('emotionalDay').textContent = results.emotional.day;
+            document.getElementById('emotionalPhase').textContent = results.emotional.phase;
+            document.getElementById('emotionalStatus').textContent = results.emotional.phase;
+            document.getElementById('emotionalStatusBadge').textContent = results.emotional.phase;
+            document.getElementById('emotionalStatusBadge').className = 'status ' + 
+                (results.emotional.phase === '高潮期' ? 'status-high' : 
+                 results.emotional.phase === '临界期' ? 'status-critical' : 'status-low');
+            
+            // 智力状态
+            document.getElementById('intellectualDay').textContent = results.intellectual.day;
+            document.getElementById('intellectualPhase').textContent = results.intellectual.phase;
+            document.getElementById('intellectualStatus').textContent = results.intellectual.phase;
+            document.getElementById('intellectualStatusBadge').textContent = results.intellectual.phase;
+            document.getElementById('intellectualStatusBadge').className = 'status ' + 
+                (results.intellectual.phase === '高潮期' ? 'status-high' : 
+                 results.intellectual.phase === '临界期' ? 'status-critical' : 'status-low');
+        }
+        
+        // 保存生日设置
+        function saveBirthday(date) {
+            localStorage.setItem('biorhythm_birthdate', date);
+            localStorage.setItem('biorhythm_last_saved', new Date().toISOString());
+        }
+        
+        // 获取保存的生日
+        function getSavedBirthday() {
+            return localStorage.getItem('biorhythm_birthdate');
+        }
+        
+        // 显示结果
+        function showResults() {
+            const birthdate = document.getElementById('birthdate').value;
+            
+            if (!birthdate) {
+                alert('请输入出生日期');
+                return;
+            }
+            
+            // 保存生日
+            saveBirthday(birthdate);
+            
+            // 计算生物节律
+            const results = calculateBiorhythm(birthdate);
+            
+            // 更新UI显示
+            updateStatusDisplay(results);
+            
+            // 设置目标日期
+            const now = new Date();
+            const formattedDate = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+            document.getElementById('targetDate').textContent = formattedDate;
+            
+            // 显示结果区域
+            document.getElementById('resultsSection').style.display = 'block';
+            
+            // 滚动到结果区域
+            document.getElementById('resultsSection').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+            
+            // 渲染图表
+            renderCharts();
+        }
+        
+        // 页面加载后运行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 添加按钮事件
+            const calculateBtn = document.getElementById('calculateBtn');
+            calculateBtn.addEventListener('click', showResults);
+            
+            // 检查是否有保存的生日
+            const savedBirthdate = getSavedBirthday();
+            const birthdateInput = document.getElementById('birthdate');
+            
+            if (savedBirthdate) {
+                birthdateInput.value = savedBirthdate;
+                document.getElementById('savedInfo').style.display = 'block';
+                
+                // 自动计算并显示结果
+                setTimeout(() => {
+                    showResults();
+                }, 500);
+            }
+            
+            // 设置当前日期为目标日期
+            const now = new Date();
+            birthdateInput.max = now.toISOString().split('T')[0];
+        });
+    </script>
+</body>
+</html>
