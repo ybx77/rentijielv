@@ -180,7 +180,7 @@
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 极值 0, 0, 0.1);
             position: relative;
         }
         
@@ -241,7 +241,7 @@
         .person-card {
             background: white;
             border-radius: 15px;
-            padding: 20px;
+            padding: 20极值px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s ease;
         }
@@ -518,7 +518,7 @@
                         <div class="form-group">
                             <label for="maleBirthdate">生日：</label>
                             <input type="date" id="maleBirthdate" value="2002-10-03" required>
-                        </div>
+                        </极值 div>
                     </div>
                 </div>
                 
@@ -699,7 +699,7 @@
                         label: '状态值',
                         data: [
                             getStatusValue(maleResults.physical.phase),
-                            get极值(maleResults.emotional.phase),
+                            getStatusValue(maleResults.emotional.phase),
                             getStatusValue(maleResults.intellectual.phase)
                         ],
                         backgroundColor: 'rgba(52, 152, 219, 0.2)',
@@ -730,7 +730,7 @@
                             display: true,
                             text: '他的节律状态',
                             font: {
-                                size极值: 16
+                                size: 16
                             }
                         }
                     }
@@ -820,7 +820,7 @@
             
             // 智力状态建议
             if (results.intellectual.phase === '高潮期') {
-                adviceList.push(`${gender === 'female'极值 ? '她' : '他'}思维敏捷，适合一起学习新东西`);
+                adviceList.push(`${gender === 'female' ? '她' : '他'}思维敏捷，适合一起学习新东西`);
             } else if (results.intellectual.phase === '临界期') {
                 adviceList.push(`${gender === 'female' ? '她' : '他'}注意力容易分散，避免讨论复杂话题`);
             } else {
