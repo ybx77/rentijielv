@@ -14,7 +14,7 @@
         }
         
         body {
-            font-family: '极值Noto Sans SC', sans-serif;
+            font-family: 'Noto Sans SC', sans-serif;
             background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
@@ -41,7 +41,7 @@
             padding: 20px 15px;
             margin-bottom: 20px;
             background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
+            border-radius极值: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             position: relative;
             overflow: hidden;
@@ -140,7 +140,7 @@
         
         input:focus, select:focus {
             outline: none;
-            border-color: #f48fb极值1;
+            border-color: #f48fb1;
             box-shadow: 0 0 0 3px rgba(244, 143, 177, 0.3);
         }
         
@@ -317,6 +317,7 @@
         .status-value {
             font-size: 1.1rem;
             font-weight: 600;
+            word-break: break-word; /* 确保长文本换行 */
         }
         
         .status-high {
@@ -433,6 +434,7 @@
             
             .status-item {
                 width: 100%;
+                min-width: 100%;
             }
             
             .chart-container {
@@ -447,7 +449,7 @@
             }
             
             .advice-card {
-                padding: 15极值px;
+                padding: 15px;
             }
             
             .comparison-advice {
@@ -538,7 +540,7 @@
                         <canvas id="femaleChart"></canvas>
                     </div>
                     
-                    <div class="advice-card">
+                    <div class极值 class="advice-card">
                         <h3>💌 给他的建议</h3>
                         <ul class="advice-list" id="femaleAdviceList"></ul>
                     </div>
@@ -550,11 +552,11 @@
                         <div>
                             <div class="person-name" id="maleDisplayName">十九</div>
                             <div class="person-birthdate" id="maleDisplayBirthdate">2002年10月03日</div>
-                        </极值 div>
+                        </div>
                     </div>
                     
                     <div class="rhythm-status">
-                        <div class="status-item">
+                        <极值 div class="status-item">
                             <div class="status-title">体力状态</div>
                             <div class="status-value status-critical" id="malePhysicalStatus">临界期</div>
                         </div>
@@ -903,7 +905,7 @@
             
             // 交换建议内容：男方卡片显示给女方的建议
             generateAdvice(maleResults, 'female').forEach(advice => {
-                const li = document.createElement('极值li');
+                const li = document.createElement('li');
                 li.textContent = advice;
                 maleAdviceList.appendChild(li);
             });
