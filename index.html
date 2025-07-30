@@ -188,22 +188,25 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            background: #3498db;
-            color: white;
+            background: #f8bbd0;
+            color: #d81b60;
             border: none;
             padding: 8px 15px;
             border-radius: 20px;
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
         .edit-btn:hover {
-            background: #2980b9;
+            background: #f48fb1;
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
         
         .overview-card {
@@ -302,12 +305,46 @@
             padding: 10px;
             border-radius: 10px;
             background: rgba(248, 187, 208, 0.2);
+            position: relative;
         }
         
         .status-title {
             font-size: 0.85rem;
             color: #7f8c8d;
             margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .status-info {
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #d81b60;
+        }
+        
+        .status-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            width: 160px;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .status-info:hover + .status-tooltip {
+            opacity: 1;
+            visibility: visible;
         }
         
         .status-value {
@@ -459,7 +496,7 @@
         </section>
         
         <section class="results-section" id="resultsSection">
-            <button class="edit-btn" id="editBirthdayBtn">修改生日</button>
+            <button class="edit-btn" id="editBirthdayBtn">✏️ 修改生日</button>
             
             <div class="overview-card">
                 <h2>情侣节律对比概览</h2>
@@ -480,15 +517,39 @@
                     
                     <div class="rhythm-status">
                         <div class="status-item">
-                            <div class="status-title">体力状态</div>
+                            <div class="status-title">
+                                体力状态
+                                <span class="status-info">ⓘ</span>
+                                <div class="status-tooltip">
+                                    高潮期：精力充沛<br>
+                                    临界期：状态波动<br>
+                                    低潮期：容易疲劳
+                                </div>
+                            </div>
                             <div class="status-value status-high" id="femalePhysicalStatus">高潮期</div>
                         </div>
                         <div class="status-item">
-                            <div class="status-title">情绪状态</div>
+                            <div class="status-title">
+                                情绪状态
+                                <span class="status-info">ⓘ</span>
+                                <div class="status-tooltip">
+                                    高潮期：情绪积极<br>
+                                    临界期：容易波动<br>
+                                    低潮期：情绪低落
+                                </div>
+                            </div>
                             <div class="status-value status-low" id="femaleEmotionalStatus">低潮期</div>
                         </div>
                         <div class="status-item">
-                            <div class="status-title">智力状态</div>
+                            <div class="status-title">
+                                智力状态
+                                <span class="status-info">ⓘ</span>
+                                <div class="status-tooltip">
+                                    高潮期：思维敏捷<br>
+                                    临界期：注意力分散<br>
+                                    低潮期：思考迟缓
+                                </div>
+                            </div>
                             <div class="status-value status-high" id="femaleIntellectualStatus">高潮期</div>
                         </div>
                     </div>
@@ -498,12 +559,12 @@
                     </div>
                     
                     <div class="advice-card">
-                        <h3>💌 给她的建议</h3>
+                        <h3>💌 给他的建议</h3>
                         <ul class="advice-list">
-                            <li>今天她体力充沛，可以一起运动或户外活动</li>
-                            <li>情绪可能有些低落，给她一个温暖的拥抱</li>
-                            <li>思维清晰，适合一起学习新东西</li>
-                            <li>晚上陪她看部温馨的电影放松心情</li>
+                            <li>今天他体力可能不稳定，避免剧烈运动</li>
+                            <li>情绪很好，适合一起规划未来</li>
+                            <li>思维可能不够清晰，重要决策可以缓一缓</li>
+                            <li>晚上陪他聊聊天，分享彼此的想法</li>
                         </ul>
                     </div>
                 </div>
@@ -519,15 +580,39 @@
                     
                     <div class="rhythm-status">
                         <div class="status-item">
-                            <div class="status-title">体力状态</div>
+                            <div class="status-title">
+                                体力状态
+                                <span class="status-info">ⓘ</span>
+                                <div class="status-tooltip">
+                                    高潮期：精力充沛<br>
+                                    临界期：状态波动<br>
+                                    低潮期：容易疲劳
+                                </div>
+                            </div>
                             <div class="status-value status-critical" id="malePhysicalStatus">临界期</div>
                         </div>
                         <div class="status-item">
-                            <div class="status-title">情绪状态</div>
+                            <div class="status-title">
+                                情绪状态
+                                <span class="status-info">ⓘ</span>
+                                <div class="status-tooltip">
+                                    高潮期：情绪积极<br>
+                                    临界期：容易波动<br>
+                                    低潮期：情绪低落
+                                </div>
+                            </div>
                             <div class="status-value status-high" id="maleEmotionalStatus">高潮期</div>
                         </div>
                         <div class="status-item">
-                            <div class="status-title">智力状态</div>
+                            <div class="status-title">
+                                智力状态
+                                <span class="status-info">ⓘ</span>
+                                <div class="status-tooltip">
+                                    高潮期：思维敏捷<br>
+                                    临界期：注意力分散<br>
+                                    低潮期：思考迟缓
+                                </div>
+                            </div>
                             <div class="status-value status-low" id="maleIntellectualStatus">低潮期</div>
                         </div>
                     </div>
@@ -537,12 +622,12 @@
                     </div>
                     
                     <div class="advice-card">
-                        <h3>💌 给他的建议</h3>
+                        <h3>💌 给她的建议</h3>
                         <ul class="advice-list">
-                            <li>今天他体力可能不稳定，避免剧烈运动</li>
-                            <li>情绪很好，适合一起规划未来</li>
-                            <li>思维可能不够清晰，重要决策可以缓一缓</li>
-                            <li>晚上陪他聊聊天，分享彼此的想法</li>
+                            <li>今天她体力充沛，可以一起运动或户外活动</li>
+                            <li>情绪可能有些低落，给她一个温暖的拥抱</li>
+                            <li>思维清晰，适合一起学习新东西</li>
+                            <li>晚上陪她看部温馨的电影放松心情</li>
                         </ul>
                     </div>
                 </div>
