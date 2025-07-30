@@ -834,50 +834,62 @@
         }
         
         // 生成相处建议
-        function generateInteractionAdvice(femaleResults, maleResults) {
-            const adviceList = [];
-            
-            // 上午建议
-            if (femaleResults.physical.phase === '高潮期') {
-                adviceList.push(`<strong>上午：</strong>她体力充沛，可以让她主导活动`);
-            } else if (maleResults.physical.phase === '高潮期') {
-                adviceList.push(`<strong>上午：</strong>他体力充沛，可以让他主导活动`);
-            } else {
-                adviceList.push(`<strong>上午：</strong>双方体力都不算最佳，适合轻松的活动`);
-            }
-            
-            // 中午建议
-            adviceList.push(`<strong>中午：</strong>一起准备午餐，享受温馨的二人时光`);
-            
-            // 下午建议
-            if (femaleResults.intellectual.phase === '高潮期') {
-                adviceList.push(`<strong>下午：</strong>她思维清晰，可以一起学习新东西`);
-            } else if (maleResults.intellectual.phase === '高潮期') {
-                adviceList.push(`<strong>下午：</strong>他思维清晰，可以一起规划未来`);
-            } else {
-                adviceList.push(`<strong>下午：</strong>双方思维都不在最佳状态，适合轻松阅读或看电影`);
-            }
-            
-            // 晚上建议
-            if (femaleResults.emotional.phase === '低潮期') {
-                adviceList.push(`<strong>晚上：</strong>她情绪需要安抚，多给她温暖的拥抱`);
-            } else if (maleResults.emotional.phase === '低潮期') {
-                adviceList.push(`<strong>晚上：</strong>他情绪需要安抚，多倾听他的想法`);
-            } else {
-                adviceList.push(`<strong>晚上：</strong>一起看部温馨的电影放松心情`);
-            }
-            
-            // 特别提示
-            if (femaleResults.physical.phase === '临界期' || maleResults.physical.phase === '临界期') {
-                adviceList.push(`<strong>特别提示：</strong>关注体力临界期，避免过度劳累`);
-            } else if (femaleResults.emotional.phase === '临界期' || maleResults.emotional.phase === '临界期') {
-                adviceList.push(`<strong>特别提示：</strong>关注情绪临界期，多给予理解和包容`);
-            } else {
-                adviceList.push(`<strong>特别提示：</strong>今天是相处的好日子，好好享受二人时光`);
-            }
-            
-            return adviceList;
-        }
+function generateInteractionAdvice(femaleResults, maleResults) {
+    const adviceList = [];
+    
+    // 上午建议
+    if (femaleResults.physical.phase === '高潮期') {
+        adviceList.push(`<strong>上午：</strong>她体力充沛，可以让她主导活动`);
+    } else if (maleResults.physical.phase === '高潮期') {
+        adviceList.push(`<strong>上午：</strong>他体力充沛，可以让他主导活动`);
+    } else {
+        adviceList.push(`<strong>上午：</strong>双方体力都不算最佳，适合轻松的活动`);
+    }
+    
+    // 中午建议 - 多种表达方式
+    const lunchSuggestions = [
+        `<strong>中午：</strong>一起准备午餐，享受温馨的二人时光`,
+        `<strong>中午：</strong>一起下厨做顿爱心午餐，分享甜蜜时刻`,
+        `<strong>中午：</strong>共享一顿精心准备的午餐，感受彼此的用心`,
+        `<strong>中午：</strong>在厨房里合作准备午餐，体验默契配合`,
+        `<strong>中午：</strong>一起享用美食，聊聊彼此的心情和想法`,
+        `<strong>中午：</strong>在午餐时间放下手机，专注陪伴彼此`,
+        `<strong>中午：</strong>尝试一起做新菜式，创造属于你们的独特味道`
+    ];
+    
+    // 随机选择一个中午建议
+    const randomIndex = Math.floor(Math.random() * lunchSuggestions.length);
+    adviceList.push(lunchSuggestions[randomIndex]);
+    
+    // 下午建议
+    if (femaleResults.intellectual.phase === '高潮期') {
+        adviceList.push(`<strong>下午：</strong>她思维清晰，可以一起学习新东西`);
+    } else if (maleResults.intellectual.phase === '高潮期') {
+        adviceList.push(`<strong>下午：</strong>他思维清晰，可以一起规划未来`);
+    } else {
+        adviceList.push(`<strong>下午：</strong>双方思维都不在最佳状态，适合轻松阅读或看电影`);
+    }
+    
+    // 晚上建议
+    if (femaleResults.emotional.phase === '低潮期') {
+        adviceList.push(`<strong>晚上：</strong>她情绪需要安抚，多给她温暖的拥抱`);
+    } else if (maleResults.emotional.phase === '低潮期') {
+        adviceList.push(`<strong>晚上：</strong>他情绪需要安抚，多倾听他的想法`);
+    } else {
+        adviceList.push(`<strong>晚上：</strong>一起看部温馨的电影放松心情`);
+    }
+    
+    // 特别提示
+    if (femaleResults.physical.phase === '临界期' || maleResults.physical.phase === '临界期') {
+        adviceList.push(`<strong>特别提示：</strong>关注体力临界期，避免过度劳累`);
+    } else if (femaleResults.emotional.phase === '临界期' || maleResults.emotional.phase === '临界期') {
+        adviceList.push(`<strong>特别提示：</strong>关注情绪临界期，多给予理解和包容`);
+    } else {
+        adviceList.push(`<strong>特别提示：</strong>今天是相处的好日子，好好享受二人时光`);
+    }
+    
+    return adviceList;
+}
         
         // 更新状态显示
         function updateStatusDisplay(femaleResults, maleResults) {
