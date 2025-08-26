@@ -23,6 +23,7 @@
             color: #333;
             -webkit-overflow-scrolling: touch;
             overflow-x: hidden;
+            overflow-y: auto; /* 添加垂直滚动 */
         }
         
         .container {
@@ -34,7 +35,7 @@
             padding: 20px;
             margin-top: 20px;
             position: relative;
-            overflow: hidden;
+            overflow: visible; /* 修改为visible，允许内容溢出 */
             -webkit-overflow-scrolling: touch;
         }
         
