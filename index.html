@@ -24,6 +24,7 @@
             -webkit-overflow-scrolling: touch;
             overflow-x: hidden;
             overflow-y: auto; /* 添加垂直滚动 */
+            position: relative;
         }
         
         .container {
@@ -34,6 +35,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             padding: 20px;
             margin-top: 20px;
+            margin-bottom: 20px;
             position: relative;
             overflow: visible; /* 修改为visible，允许内容溢出 */
             -webkit-overflow-scrolling: touch;
@@ -306,6 +308,7 @@
         @media (max-width: 600px) {
             body {
                 padding: 10px;
+                overflow-y: auto;
             }
             
             .container {
@@ -423,6 +426,7 @@
         @media (max-width: 480px) {
             body {
                 padding: 5px;
+                overflow-y: auto;
             }
             
             .container {
@@ -539,6 +543,7 @@
         @media screen and (max-height: 500px) and (orientation: landscape) {
             body {
                 padding: 5px;
+                overflow-y: auto;
             }
             
             .container {
@@ -717,12 +722,12 @@
             lastTouchEnd = now;
         }, false);
         
-        // 防止iOS Safari中的弹性滚动
-        document.body.addEventListener('touchmove', function(e) {
-            if (e.target.closest('.container')) {
-                e.preventDefault();
-            }
-        }, { passive: false });
+        // 移除阻止滚动的代码，允许正常滚动
+        // document.body.addEventListener('touchmove', function(e) {
+        //     if (e.target.closest('.container')) {
+        //         e.preventDefault();
+        //     }
+        // }, { passive: false });
         
         document.addEventListener('DOMContentLoaded', function() {
             // 游戏状态
