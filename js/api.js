@@ -1,8 +1,10 @@
 // ========================
 // 暧昧实验室 - API 配置
-// 集中在一处维护，IP / 端口变更只需改这里
+// 所有 /api/* 请求走 Vercel 服务端代理 → 绕过 HTTPS/MixedContent 限制
+// 后端 IP / 端口变更只需改 api/index.js 中的 API_TARGET
 // ========================
-window.API_BASE_URL = 'http://43.248.102.104:30872';
+// 前端直接用相对路径，Vercel 服务端代理转发
+window.API_BASE_URL = '';
 
 // 通用请求封装
 async function api(path, options = {}) {
