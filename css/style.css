@@ -1225,6 +1225,14 @@ body {
     .game-card-name { font-size: 0.75rem; }
 }
 
+.pay-qr-img {
+    display: block;
+    width: 180px;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
 @media (min-width: 480px) {
     .game-grid { grid-template-columns: repeat(4, 1fr); }
 }
@@ -1233,3 +1241,536 @@ body {
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+/* ================================================================
+   甜蜜双打 · Premium Game Styles
+   ================================================================ */
+
+/* === 许愿池轮盘动画 === */
+@keyframes wheelSlotSpin {
+    0%   { transform: translateY(-120px); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.wheel-reel-container {
+    position: relative;
+    width: 100%;
+    height: 120px;
+    overflow: hidden;
+    border: 2px solid var(--border2);
+    border-radius: var(--radius);
+    background: rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.wheel-reel {
+    width: 100%;
+    transition: none;
+}
+
+.wheel-cell {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.wheel-winning-slot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    width: 100%;
+    justify-content: center;
+    display: none;
+}
+
+.wheel-winning-cell {
+    height: 120px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--gold);
+    flex-direction: column;
+    background: rgba(245,158,11,0.08);
+    text-shadow: 0 0 16px rgba(245,158,11,0.5);
+    animation: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px;
+    border-radius: var(--radius);
+}
+
+.wheel-winning-cell .wheel-icon { font-size: 2rem; margin-bottom: 4px; }
+
+.wheel-frame {
+    position: relative;
+    margin: 16px 0;
+}
+
+.wheel-pointer-down {
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.4rem;
+    color: var(--gold);
+    text-shadow: 0 0 10px var(--gold-glow);
+    z-index: 5;
+}
+
+.wheel-title { font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
+.wheel-subtitle { font-size: 0.85rem; color: var(--text2); margin-bottom: 16px; }
+.wheel-play .wheel-reel-container {
+    border: 2px solid rgba(245,158,11,0.3);
+    box-shadow: 0 0 20px rgba(245,158,11,0.1);
+}
+
+.wheel-spin-btn {
+    font-size: 1.1rem;
+    padding: 16px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 4px 16px rgba(255,77,141,0.4); }
+    50% { box-shadow: 0 4px 32px rgba(255,77,141,0.7), 0 0 48px rgba(255,77,141,0.3); }
+}
+
+/* === 卡牌对决样式 === */
+.duel-result { padding: 32px 20px; }
+.result-emoji { font-size: 5rem; animation: bounceIn 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+.result-title { font-size: 1.8rem; font-weight: 900; color: #fff; margin: 12px 0; }
+.result-desc { color: var(--text2); font-size: 0.95rem; margin-bottom: 20px; }
+.result-stats { margin: 16px 0; text-align: left; }
+
+@keyframes bounceIn {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.round-announce {
+    font-size: 0.8rem;
+    color: var(--gold);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+}
+
+.card-choice-grid {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 16px 0;
+}
+
+.card-choice-btn {
+    width: 80px;
+    padding: 16px 8px;
+    border-radius: var(--radius);
+    background: var(--surface2);
+    border: 2px solid var(--card-color, var(--border));
+    cursor: pointer;
+    transition: all 0.25s;
+    text-align: center;
+}
+
+.card-choice-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+.card-choice-btn.selected {
+    border-color: var(--card-color, var(--pink));
+    background: rgba(255,77,141,0.15);
+    box-shadow: 0 0 16px rgba(255,77,141,0.3);
+}
+
+.card-choice-btn.card-special {
+    border-color: var(--purple);
+    background: rgba(168,85,247,0.1);
+}
+
+.card-choice-icon { font-size: 1.8rem; font-weight: 900; margin-bottom: 4px; }
+.card-choice-label { font-size: 0.72rem; color: var(--text2); }
+
+.duel-selected-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin: 16px 0;
+    padding: 12px;
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+}
+
+.duel-selected-player {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.duel-player-label { font-size: 0.75rem; color: var(--text2); }
+.duel-selected-card { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+.duel-selected-vs { font-size: 1rem; font-weight: 900; color: var(--text3); }
+
+/* 翻牌动画 */
+.duel-reveal-row { gap: 20px; }
+
+.duel-card-wrapper { position: relative; }
+
+.duel-card {
+    width: 90px;
+    height: 130px;
+    border-radius: 12px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.duel-card-back,
+.duel-card-front {
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.duel-card-back {
+    background: linear-gradient(135deg, #2a2a4a, #1a1a3a);
+    border: 2px solid rgba(168,85,247,0.4);
+    font-size: 2.2rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+.duel-card-front {
+    background: linear-gradient(135deg, #fff, #ffe4ec);
+    color: #c44569;
+    transform: rotateY(180deg);
+    font-weight: 800;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.duel-card-points { font-size: 2.4rem; margin-bottom: 4px; }
+.duel-card-name { font-size: 0.75rem; font-weight: 600; }
+
+.duel-card.flipped { transform: rotateY(180deg); }
+
+.special-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--purple);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    box-shadow: 0 0 10px var(--purple-glow);
+    z-index: 2;
+}
+
+.reveal-result { margin-top: 12px; }
+.round-win-text { font-size: 1.2rem; font-weight: 700; color: var(--gold); animation: screenIn 0.4s ease; }
+
+/* 偷看阶段 */
+.peek-phase { padding: 32px 20px; }
+.peek-icon { font-size: 3rem; margin-bottom: 8px; animation: peekShake 0.5s ease; }
+.peek-card-reveal {
+    margin: 20px auto;
+    padding: 24px;
+    background: linear-gradient(135deg, #fff, #ffe4ec);
+    border-radius: var(--radius);
+    max-width: 200px;
+    transition: all 0.5s;
+}
+.peek-card-reveal.peek-hidden { opacity: 0; transform: scale(0.8); }
+.peek-card-name { font-size: 0.8rem; color: var(--text2); margin-bottom: 8px; }
+.peek-card-value { font-size: 1.1rem; font-weight: 800; color: #c44569; }
+.peek-hint { font-size: 0.8rem; color: var(--text2); margin-top: 8px; }
+
+@keyframes peekShake {
+    0%, 100% { transform: rotate(0); }
+    25% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+}
+
+/* === 心有灵犀样式 === */
+.quiz-intro { padding: 32px 20px; }
+.quiz-intro-icon { font-size: 4rem; margin-bottom: 8px; }
+.quiz-intro-rules { text-align: left; margin: 16px 0; }
+.quiz-rule { padding: 8px 0; color: var(--text2); font-size: 0.9rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.quiz-rule-num { width: 24px; height: 24px; border-radius: 50%; background: var(--pink); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+
+.quiz-question-box { margin: 16px 0; padding: 20px; background: var(--surface2); border-radius: var(--radius); }
+.quiz-role-icon { font-size: 2.5rem; margin-bottom: 8px; }
+.quiz-question-text { font-size: 1.1rem; font-weight: 700; color: #fff; line-height: 1.5; }
+.quiz-hint { padding: 8px 16px; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: var(--radius-sm); color: var(--gold); font-size: 0.85rem; margin: 10px 0; }
+.quiz-timer { font-size: 1.6rem; font-weight: 900; color: var(--gold); margin: 8px 0; font-family: monospace; }
+.quiz-answer-feedback { margin: 12px 0; font-size: 1rem; font-weight: 700; }
+.feedback-correct { color: #10b981; }
+.feedback-wrong { color: #ef4444; }
+
+.opt-selected { border-color: var(--pink) !important; background: rgba(255,77,141,0.1) !important; }
+
+/* 兼容性结果 */
+.compat-score { font-size: 5rem; animation: bounceIn 0.6s ease; }
+.compat-title { font-size: 1.6rem; font-weight: 900; color: var(--gold); margin: 8px 0; }
+.compat-desc { color: var(--text2); margin-bottom: 20px; }
+.compat-bar-wrap { margin: 16px 0; }
+.compat-bar-label { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text2); margin: 4px 0; }
+.compat-bar { height: 8px; background: var(--surface2); border-radius: 4px; margin-bottom: 8px; overflow: hidden; }
+.compat-bar-fill { height: 100%; background: var(--pink); border-radius: 4px; transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+.compat-bar-b { background: var(--purple); }
+.compat-history { margin-top: 16px; text-align: left; }
+
+/* === 知识抢答样式 === */
+.battle-intro { padding: 32px 20px; }
+.battle-intro-icon { font-size: 4rem; margin-bottom: 8px; }
+.battle-rules { text-align: left; margin: 16px 0; }
+.battle-rule { padding: 8px 0; color: var(--text2); font-size: 0.9rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+
+.battle-buizzer-phase { padding: 24px 20px; }
+.battle-buizzer-phase.buzzer-active { border-color: var(--gold); box-shadow: 0 0 24px var(--gold-glow); }
+.battle-question-box { margin: 12px 0; padding: 16px; background: var(--surface2); border-radius: var(--radius); }
+.battle-q-num { font-size: 0.75rem; color: var(--gold); font-weight: 700; margin-bottom: 6px; }
+.battle-q-text { font-size: 1.05rem; font-weight: 700; color: #fff; line-height: 1.5; }
+.buzzer-countdown { font-size: 2rem; font-weight: 900; color: var(--gold); margin: 8px 0; font-family: monospace; }
+.buzzer-btn { font-size: 1.1rem; padding: 18px; margin: 8px 0; }
+.buzzer-btn-glow { animation: buzzerGlow 1.5s ease-in-out infinite; }
+.buzzer-hint { font-size: 0.78rem; color: var(--text3); }
+
+@keyframes buzzerGlow {
+    0%, 100% { box-shadow: 0 4px 16px rgba(245,158,11,0.4); }
+    50% { box-shadow: 0 4px 40px rgba(245,158,11,0.8), 0 0 60px rgba(245,158,11,0.4); }
+}
+
+.buzzer-result-icon { font-size: 3rem; animation: bounceIn 0.5s ease; }
+.buzzer-owner-name { font-size: 1.1rem; font-weight: 700; color: var(--gold); margin: 8px 0; }
+.answer-timer { font-size: 1.8rem; font-weight: 900; color: var(--gold); margin: 8px 0; font-family: monospace; }
+
+.battle-result-icon { font-size: 5rem; animation: bounceIn 0.6s ease; }
+.battle-final-score { font-size: 1.2rem; color: var(--text2); margin: 8px 0; }
+
+/* === 爱的挑战样式 === */
+.dare-intro-icon { font-size: 4rem; margin-bottom: 8px; }
+.dare-rules { text-align: left; margin: 16px 0; font-size: 0.88rem; color: var(--text2); }
+.dare-rule { padding: 6px 0; border-bottom: 1px solid var(--border); }
+
+.difficulty-grid {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 16px 0;
+}
+
+.difficulty-card {
+    width: 100px;
+    padding: 16px 10px;
+    border-radius: var(--radius);
+    background: var(--surface2);
+    border: 2px solid var(--diff-color, var(--border));
+    cursor: pointer;
+    transition: all 0.25s;
+    text-align: center;
+}
+
+.difficulty-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+.diff-icon { font-size: 1.8rem; margin-bottom: 4px; }
+.diff-name { font-size: 0.85rem; font-weight: 800; color: var(--diff-color); margin-bottom: 2px; }
+.diff-desc { font-size: 0.72rem; color: var(--text2); margin-bottom: 4px; }
+.diff-stars { font-size: 0.75rem; color: var(--gold); }
+
+.task-reveal-wrap { margin: 16px 0; }
+.task-category-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 999px;
+    background: rgba(168,85,247,0.2);
+    border: 1px solid rgba(168,85,247,0.4);
+    color: var(--purple);
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.task-reveal-card {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 24px;
+    transform: scale(0.8);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.task-reveal-card.task-revealed {
+    transform: scale(1);
+    opacity: 1;
+    border-color: var(--pink);
+    box-shadow: 0 0 24px var(--pink-glow);
+}
+
+.task-reveal-text { font-size: 1.15rem; font-weight: 700; color: #fff; line-height: 1.5; }
+
+.rating-section { margin: 16px 0; }
+.rating-player { margin: 12px 0; font-size: 0.88rem; color: var(--text2); }
+.star-row { display: flex; justify-content: center; gap: 8px; margin-top: 6px; }
+.star-btn { font-size: 2rem; cursor: pointer; transition: transform 0.15s; }
+.star-btn:hover { transform: scale(1.3); }
+
+.dare-result-emoji { font-size: 5rem; animation: bounceIn 0.6s ease; }
+.dare-result-avg { font-size: 1.1rem; color: var(--gold); font-weight: 700; margin: 8px 0; }
+.dare-result-bar { display: flex; justify-content: center; gap: 8px; margin: 12px 0; }
+.dare-star-full { font-size: 2rem; }
+
+/* === 荒岛余生样式 === */
+.island-intro { padding: 32px 20px; }
+.island-intro-icon { font-size: 4rem; margin-bottom: 8px; }
+.island-journey-preview { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+.journey-step { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.journey-step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--pink); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; }
+.journey-arrow { font-size: 1.2rem; color: var(--text3); }
+.island-point-preview { display: flex; justify-content: center; gap: 24px; margin: 16px 0; }
+.island-point-item { display: flex; align-items: center; gap: 6px; font-size: 0.88rem; color: var(--text2); }
+.island-point-icon { font-size: 1.2rem; }
+
+.island-pts-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 20px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 16px;
+}
+
+.island-pts-item { display: flex; align-items: center; gap: 6px; font-size: 1.1rem; font-weight: 900; }
+.island-round-label { font-size: 0.8rem; color: var(--text2); }
+
+.island-round-area { padding: 24px 16px; }
+.island-scenario-title { font-size: 1.05rem; font-weight: 700; color: #fff; line-height: 1.5; margin-bottom: 16px; }
+
+.island-options-grid { display: flex; flex-direction: column; gap: 10px; }
+
+.island-option-card {
+    padding: 14px;
+    border-radius: var(--radius);
+    background: var(--surface2);
+    border: 2px solid var(--opt-color, var(--border));
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.island-option-card:hover { transform: translateX(4px); box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+.island-option-card.island-selected { border-color: var(--opt-color, var(--pink)); background: rgba(255,77,141,0.1); }
+
+.island-opt-icon { font-size: 1.6rem; flex-shrink: 0; }
+.island-opt-text { flex: 1; font-size: 0.9rem; font-weight: 600; color: var(--text); }
+.island-opt-stats { display: flex; flex-direction: column; gap: 2px; align-items: flex-end; }
+.island-opt-stat { font-size: 0.72rem; font-weight: 700; }
+.island-opt-stat.romance { color: var(--pink); }
+.island-opt-stat.survival { color: var(--cyan); }
+
+.island-resource-title { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 12px; }
+
+.fate-title { font-size: 1rem; font-weight: 700; color: var(--gold); margin-bottom: 16px; line-height: 1.5; }
+.fate-options { display: flex; flex-direction: column; gap: 12px; }
+.fate-option-card {
+    padding: 16px;
+    border-radius: var(--radius);
+    background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(255,77,141,0.1));
+    border: 1px solid rgba(245,158,11,0.3);
+    cursor: pointer;
+    transition: all 0.25s;
+}
+
+.fate-option-card:hover { transform: translateX(4px); border-color: var(--gold); }
+.fate-opt-text { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.fate-opt-desc { font-size: 0.78rem; color: var(--text2); }
+
+/* 结局 */
+.island-ending { padding: 32px 20px; }
+.ending-emoji { font-size: 4rem; margin-bottom: 8px; }
+.ending-desc { color: var(--text2); font-size: 0.88rem; line-height: 1.6; margin: 12px 0; }
+.ending-pts-summary { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 20px 0; flex-wrap: wrap; }
+.ending-pts-card { padding: 12px 16px; border-radius: var(--radius-sm); text-align: center; min-width: 80px; }
+.ending-pts-icon { font-size: 1.4rem; margin-bottom: 4px; }
+.ending-pts-num { font-size: 1.4rem; font-weight: 900; }
+.ending-pts-label { font-size: 0.7rem; color: var(--text2); margin-top: 2px; }
+.romance-card { background: rgba(255,77,141,0.1); border: 1px solid rgba(255,77,141,0.2); }
+.romance-card .ending-pts-num { color: var(--pink); }
+.survival-card { background: rgba(6,182,212,0.1); border: 1px solid rgba(6,182,212,0.2); }
+.survival-card .ending-pts-num { color: var(--cyan); }
+.total-card { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); }
+.total-card .ending-pts-num { color: var(--gold); }
+.ending-pts-vs { font-size: 1.2rem; color: var(--text3); font-weight: 700; }
+
+/* === 亲吻挑战 === */
+.kiss-stage { display: flex; align-items: center; justify-content: center; gap: 20px; margin: 16px 0; }
+.kiss-avatar { text-align: center; }
+.kiss-label { font-size: 0.75rem; color: var(--text2); margin-top: 4px; }
+.kiss-line { font-size: 1rem; color: var(--pink); font-weight: 700; }
+
+/* === 愿望历史 === */
+.wish-history-section { margin: 16px 0; }
+.wish-history-title { font-size: 0.85rem; font-weight: 700; color: var(--text2); margin-bottom: 10px; }
+
+/* === 游戏内 input 样式 === */
+.input-label { display: block; font-size: 0.8rem; color: var(--text2); margin-bottom: 6px; text-align: left; }
+.input-field { width: 100%; padding: 12px 14px; background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius-sm); color: var(--text); font-size: 0.92rem; outline: none; margin-bottom: 12px; transition: border-color 0.2s; }
+.input-field:focus { border-color: var(--pink); }
+.input-field::placeholder { color: var(--text3); }
+
+/* === 情书工坊 === */
+.letter-template-switch { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 12px; }
+
+/* === 按摩券 === */
+.coupon { background: linear-gradient(135deg, #fff, #fff5f8); color: #c44569; border-radius: var(--radius); padding: 24px 20px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.25); position: relative; overflow: hidden; margin: 16px 0; }
+.coupon-title { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+.coupon-part { font-size: 1.5rem; font-weight: 900; margin: 8px 0; }
+.coupon-meta { font-size: 0.85rem; opacity: 0.7; }
+.coupon-bonus { font-size: 0.82rem; color: var(--pink); margin: 8px 0; }
+.coupon-sign { font-size: 0.78rem; opacity: 0.5; }
+
+/* === 愿望罐 === */
+.dream-jar { font-size: 4rem; animation: jarFloat 3s ease-in-out infinite; }
+@keyframes jarFloat {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-8px) rotate(3deg); }
+}
+.dream-tag { font-size: 0.8rem; color: var(--text2); margin: 8px 0; }
+.dream-text { font-size: 1.2rem; font-weight: 700; color: #fff; margin: 12px 0; }
+
+/* === 任务卡通用 === */
+.task-header { margin-bottom: 12px; }

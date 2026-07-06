@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>甜蜜双打 - 情侣互动游戏平台</title>
+    <title>暧昧实验室 - 情侣互动游戏平台</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -28,7 +28,7 @@
             <!-- 顶栏 -->
             <div class="topbar">
                 <div class="topbar-logo">
-                    甜蜜双打
+                    暧昧实验室
                     <span>Couple Game</span>
                 </div>
                 <div class="topbar-actions" id="topbarRight">
@@ -350,22 +350,22 @@
                     <button class="game-topbar-back" onclick="showScreen('welcomeScreen')"><i class="fas fa-chevron-left"></i></button>
                     <div>
                         <div class="game-topbar-title">解锁私密模式</div>
-                        <div class="game-topbar-meta">一次性付费，永久使用</div>
+                        <div class="game-topbar-meta">绑定情侣，共享会员权益</div>
                     </div>
                     <div style="width:38px;"></div>
                 </div>
                 <div class="pay-hero">
                     <span class="pay-icon">💎</span>
-                    <div class="pay-price">¥19.9</div>
-                    <div class="pay-desc">解锁全部 7 款私密专属玩法</div>
+                    <div class="pay-price">¥5.20</div>
+                    <div class="pay-desc">绑定情侣后，TA 付费你也享会员权益</div>
                 </div>
                 <div class="pay-qr-area">
-                    <div class="pay-qr-placeholder"><i class="fas fa-qrcode"></i></div>
-                    <div class="pay-method-label">微信扫码支付</div>
+                    <img src="images/charge.jpg" alt="支付码" class="pay-qr-img" style="max-width:200px;border-radius:12px;border:2px solid rgba(255,255,255,0.1);">
+                    <div class="pay-method-label">微信扫码支付 ¥5.20</div>
                 </div>
                 <div class="pay-input-area">
                     <div class="pay-input-label">支付完成后，输入交易订单号</div>
-                    <input type="text" class="modal-input" id="orderInput" placeholder="请输入交易订单号（纯数字）" inputmode="numeric" style="margin-bottom:12px;">
+                    <input type="text" class="modal-input" id="orderInput" placeholder="输入交易订单号（纯数字）" inputmode="numeric" style="margin-bottom:12px;">
                     <button class="btn-primary" onclick="unlockPrivateMode()">
                         <i class="fas fa-unlock"></i> 确认解锁
                     </button>

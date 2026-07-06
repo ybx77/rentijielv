@@ -1,5 +1,5 @@
 // ========================
-// 甜蜜双打 - API 配置
+// 暧昧实验室 - API 配置
 // 集中在一处维护，IP / 端口变更只需改这里
 // ========================
 window.API_BASE_URL = 'http://43.248.102.104:30872';
@@ -89,14 +89,36 @@ const Auth = {
 // 订单
 // ====================================================
 const Orders = {
-    async submit(orderNo, amount) {
-        return api('/api/submit_order.php', { method: 'POST', body: { order_no: orderNo, amount } });
+    async submit(orderNo) {
+        return api('/api/submit_order.php', { method: 'POST', body: { order_no: orderNo, amount: 5.20 } });
     },
     async status(orderNo) {
         return api('/api/order_status.php?order_no=' + encodeURIComponent(orderNo));
     },
     async list() {
         return api('/api/orders.php');
+    }
+};
+
+// Partner / VIP
+const Partner = {
+    async getStatus() {
+        return api('/api/partner.php');
+    },
+    async bind(username) {
+        return api('/api/partner.php?action=bind', {
+            method: 'POST',
+            body: { partner_username: username }
+        });
+    },
+    async unbind() {
+        return api('/api/partner.php?action=unbind', { method: 'POST' });
+    }
+};
+
+const Membership = {
+    async getStatus() {
+        return api('/api/membership.php');
     }
 };
 
