@@ -1,0 +1,117 @@
+// ========================
+// 甜蜜双打 - API 配置
+// 集中在一处维护，IP / 端口变更只需改这里
+// ========================
+window.API_BASE_URL = 'http://43.248.102.104:30872';
+
+// 通用请求封装
+async function api(path, options = {}) {
+    const token = localStorage.getItem('couple_token') || '';
+    const opts = {
+        method: options.method || 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': 'Bearer ' + token } : {}),
+            ...(options.headers || {})
+        }
+    };
+    if (options.body) opts.body = JSON.stringify(options.body);
+    try {
+        const r = await fetch(window.API_BASE_URL + path, opts);
+        const j = await r.json().catch(() => ({ code: r.status, msg: '服务异常' }));
+        if (j.code !== 200) {
+            if (j.code === 401) {
+                localStorage.removeItem('couple_token');
+                localStorage.removeItem('couple_user');
+            }
+            throw new Error(j.msg || '请求失败');
+        }
+        return j.data;
+    } catch (err) {
+        if (err.message === 'Failed to fetch') {
+            throw new Error('无法连接后端服务，请稍后再试');
+        }
+        throw err;
+    }
+}
+
+// ====================================================
+// 鉴权
+// ====================================================
+const Auth = {
+    isLoggedIn() {
+        return !!localStorage.getItem('couple_token');
+    },
+    currentUser() {
+        try { return JSON.parse(localStorage.getItem('couple_user') || 'null'); }
+        catch { return null; }
+    },
+    setSession(token, user) {
+        localStorage.setItem('couple_token', token);
+        localStorage.setItem('couple_user', JSON.stringify(user));
+    },
+    logout() {
+        localStorage.removeItem('couple_token');
+        localStorage.removeItem('couple_user');
+        showToast('已退出登录');
+        refreshAuthUI();
+        renderHomeGrids();
+        showScreen('welcomeScreen');
+    },
+    async register({ username, password, nickname, partner_name, email }) {
+        const data = await api('/api/register.php', {
+            method: 'POST',
+            body: { username, password, nickname, partner_name, email }
+        });
+        Auth.setSession(data.token, data.user);
+        return data.user;
+    },
+    async login({ username, password }) {
+        const data = await api('/api/login.php', {
+            method: 'POST',
+            body: { username, password }
+        });
+        Auth.setSession(data.token, data.user);
+        return data.user;
+    },
+    async updateProfile({ nickname, partner_name, email }) {
+        const data = await api('/api/profile.php', {
+            method: 'POST',
+            body: { nickname, partner_name, email }
+        });
+        const cur = Auth.currentUser() || {};
+        Auth.setSession(localStorage.getItem('couple_token'), { ...cur, ...data.user });
+        return data.user;
+    }
+};
+
+// ====================================================
+// 订单
+// ====================================================
+const Orders = {
+    async submit(orderNo, amount) {
+        return api('/api/submit_order.php', { method: 'POST', body: { order_no: orderNo, amount } });
+    },
+    async status(orderNo) {
+        return api('/api/order_status.php?order_no=' + encodeURIComponent(orderNo));
+    },
+    async list() {
+        return api('/api/orders.php');
+    }
+};
+
+// ====================================================
+// 游戏记录（同步到后端）
+// ====================================================
+const GameRecord = {
+    async save({ gameType, score, partnerScore, meta }) {
+        try {
+            await api('/api/record_game.php', {
+                method: 'POST',
+                body: { game_type: gameType, score, partner_score: partnerScore, meta }
+            });
+        } catch (e) {
+            // 后端未部署时静默失败，不影响游戏体验
+        }
+    }
+};

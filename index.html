@@ -3,1164 +3,450 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>情侣卡牌游戏</title>
+    <title>甜蜜双打 - 情侣互动游戏平台</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            color: #333;
-            -webkit-overflow-scrolling: touch;
-            overflow-x: hidden;
-            overflow-y: auto; /* 添加垂直滚动 */
-            position: relative;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            padding: 20px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-            position: relative;
-            overflow: visible; /* 修改为visible，允许内容溢出 */
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        h1 {
-            text-align: center;
-            color: #ff6b6b;
-            margin: 15px 0;
-            font-size: 2.2rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-        
-        .game-phase {
-            display: none;
-        }
-        
-        .active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .btn {
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 50px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 10px 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-            min-height: 44px;
-        }
-        
-        .btn:hover {
-            background: #ff5252;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        
-        .btn-large {
-            font-size: 1.2rem;
-            padding: 15px 30px;
-        }
-        
-        .btn-secondary {
-            background: #6c757d;
-        }
-        
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-        
-        .center {
-            text-align: center;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin: 15px 0;
-            transition: transform 0.3s ease;
-            border: 2px solid transparent;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-        
-        .rps-options {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
-        }
-        
-        .rps-btn {
-            font-size: 3rem;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: #f8f9fa;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-        }
-        
-        .rps-btn:hover {
-            transform: scale(1.1);
-            background: #ff6b6b;
-            color: white;
-        }
-        
-        .rps-btn.selected {
-            background: #ff6b6b;
-            color: white;
-            transform: scale(1.1);
-            box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
-        }
-        
-        .rps-section {
-            margin: 20px 0;
-            padding: 15px;
-            border-radius: 10px;
-            background: #f8f9fa;
-        }
-        
-        .rps-section h3 {
-            text-align: center;
-            margin-bottom: 15px;
-            color: #ff6b6b;
-        }
-        
-        .hand {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .card-item {
-            width: 100px;
-            height: 140px;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-        }
-        
-        .card-item:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-        
-        .task-card {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-        }
-        
-        .card-title {
-            font-size: 1rem;
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: white;
-        }
-        
-        .card-content {
-            font-size: 0.8rem;
-            text-align: center;
-            font-weight: 500;
-            color: white;
-        }
-        
-        .player-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-        
-        .player {
-            text-align: center;
-            padding: 10px;
-            border-radius: 10px;
-            flex: 1;
-            margin: 0 5px;
-            transition: all 0.3s ease;
-        }
-        
-        .active-player {
-            background: #fff0f0;
-            box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
-        }
-        
-        .card-display {
-            min-height: 200px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 15px;
-            background: #f8f9fa;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .card-display-content {
-            font-size: 1.2rem;
-            text-align: center;
-            margin: 15px 0;
-            font-weight: 500;
-        }
-        
-        .instructions {
-            background: #e7f5ff;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-        
-        .heart {
-            color: #ff6b6b;
-            margin: 0 3px;
-        }
-        
-        .rps-result {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 20px 0;
-        }
-        
-        .rps-choice {
-            text-align: center;
-        }
-        
-        .rps-icon {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-        
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .game-over {
-            text-align: center;
-            font-size: 1.5rem;
-            color: #ff6b6b;
-            margin: 20px 0;
-            font-weight: bold;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-                overflow-y: auto;
-            }
-            
-            .container {
-                padding: 15px;
-                margin-top: 10px;
-                border-radius: 15px;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-                margin: 10px 0;
-            }
-            
-            .btn {
-                padding: 10px 20px;
-                font-size: 0.9rem;
-                margin: 8px 3px;
-            }
-            
-            .btn-large {
-                font-size: 1.1rem;
-                padding: 12px 25px;
-            }
-            
-            .card {
-                padding: 15px;
-                margin: 10px 0;
-            }
-            
-            .rps-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 2rem;
-            }
-            
-            .rps-options {
-                gap: 15px;
-                margin: 15px 0;
-            }
-            
-            .hand {
-                flex-direction: column;
-                align-items: center;
-                gap: 15px;
-                margin: 15px 0;
-            }
-            
-            .card-item {
-                width: 100%;
-                max-width: 300px;
-                height: auto;
-                min-height: 80px;
-                padding: 15px;
-            }
-            
-            .card-title {
-                font-size: 1.1rem;
-                margin-bottom: 10px;
-            }
-            
-            .card-content {
-                font-size: 0.9rem;
-                line-height: 1.4;
-            }
-            
-            .player-info {
-                flex-direction: column;
-                gap: 10px;
-                margin-bottom: 15px;
-            }
-            
-            .player {
-                margin: 0;
-                padding: 8px;
-            }
-            
-            .rps-result {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .rps-icon {
-                font-size: 2.5rem;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-                align-items: center;
-                gap: 8px;
-            }
-            
-            .card-display {
-                min-height: 150px;
-                padding: 15px;
-                margin: 15px 0;
-            }
-            
-            .card-display-content {
-                font-size: 1rem;
-                margin: 10px 0;
-            }
-            
-            .instructions {
-                padding: 12px;
-                font-size: 0.85rem;
-                margin: 15px 0;
-            }
-            
-            .game-over {
-                font-size: 1.3rem;
-                margin: 15px 0;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            body {
-                padding: 5px;
-                overflow-y: auto;
-            }
-            
-            .container {
-                padding: 10px;
-                margin-top: 5px;
-            }
-            
-            h1 {
-                font-size: 1.5rem;
-            }
-            
-            .btn {
-                padding: 8px 16px;
-                font-size: 0.85rem;
-            }
-            
-            .btn-large {
-                font-size: 1rem;
-                padding: 10px 20px;
-            }
-            
-            .rps-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 1.8rem;
-            }
-            
-            .rps-options {
-                gap: 10px;
-            }
-            
-            .hand {
-                gap: 12px;
-            }
-            
-            .card-item {
-                width: 100%;
-                max-width: 280px;
-                min-height: 70px;
-                padding: 12px;
-            }
-            
-            .card-title {
-                font-size: 1rem;
-                margin-bottom: 8px;
-            }
-            
-            .card-content {
-                font-size: 0.85rem;
-                line-height: 1.3;
-            }
-            
-            .card-display {
-                min-height: 120px;
-                padding: 10px;
-            }
-            
-            .card-display-content {
-                font-size: 0.9rem;
-            }
-            
-            .instructions {
-                padding: 10px;
-                font-size: 0.8rem;
-            }
-            
-            .game-over {
-                font-size: 1.1rem;
-            }
-        }
-        
-        @media (max-width: 360px) {
-            .rps-btn {
-                width: 45px;
-                height: 45px;
-                font-size: 1.6rem;
-            }
-            
-            .card-item {
-                width: 100%;
-                max-width: 260px;
-                min-height: 65px;
-                padding: 10px;
-            }
-            
-            .card-title {
-                font-size: 0.95rem;
-                margin-bottom: 6px;
-            }
-            
-            .card-content {
-                font-size: 0.8rem;
-                line-height: 1.2;
-            }
-            
-            h1 {
-                font-size: 1.3rem;
-            }
-            
-            .btn {
-                padding: 6px 12px;
-                font-size: 0.8rem;
-            }
-        }
-        
-        /* 防止iOS Safari中的缩放问题 */
-        @media screen and (max-width: 768px) {
-            input, select, textarea {
-                font-size: 16px;
-            }
-        }
-        
-        /* 横屏模式优化 */
-        @media screen and (max-height: 500px) and (orientation: landscape) {
-            body {
-                padding: 5px;
-                overflow-y: auto;
-            }
-            
-            .container {
-                padding: 10px;
-                margin-top: 5px;
-            }
-            
-            h1 {
-                font-size: 1.2rem;
-                margin: 5px 0;
-            }
-            
-            .card {
-                padding: 10px;
-                margin: 5px 0;
-            }
-            
-            .hand {
-                flex-direction: row;
-                flex-wrap: wrap;
-                gap: 8px;
-                margin: 10px 0;
-                justify-content: center;
-            }
-            
-            .card-item {
-                width: 120px;
-                height: 80px;
-                padding: 8px;
-            }
-            
-            .card-title {
-                font-size: 0.8rem;
-                margin-bottom: 4px;
-            }
-            
-            .card-content {
-                font-size: 0.6rem;
-                line-height: 1.1;
-            }
-            
-            .rps-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 1.4rem;
-            }
-            
-            .player-info {
-                margin-bottom: 10px;
-            }
-            
-            .card-display {
-                min-height: 80px;
-                padding: 8px;
-                margin: 10px 0;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h1><i class="fas fa-heart heart"></i> 情侣卡牌游戏 <i class="fas fa-heart heart"></i></h1>
-    
+
+    <!-- 粒子背景 -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ================================================================
+         主容器
+    ================================================================ -->
     <div class="container">
-        <!-- 欢迎界面 -->
-        <div id="welcome-phase" class="game-phase active">
-            <div class="card">
-                <h2>欢迎来到情侣卡牌游戏！</h2>
-                <p>这是一个专为情侣设计的互动游戏，通过完成卡牌上的任务增进感情。</p>
-                <div class="instructions">
-                    <p><strong>游戏规则：</strong></p>
-                    <ol>
-                        <li>通过猜拳决定谁先出牌</li>
-                        <li>每人初始获得4张卡片，由猜拳赢方先出牌</li>
-                        <li>轮流出牌：A出牌，B必须完成牌面指令；然后B出牌，A必须完成指令</li>
-                        <li>每轮结束后，会自动补充手牌到4张（如果牌库有足够的牌）</li>
-                        <li>共有58张任务卡，每张卡牌只能抽到一次</li>
-                        <li>所有卡牌抽完并使用完游戏结束</li>
-                    </ol>
+
+        <!-- ================================================================
+             欢迎页 / 首页
+        ================================================================ -->
+        <div class="screen active" id="welcomeScreen">
+
+            <!-- 顶栏 -->
+            <div class="topbar">
+                <div class="topbar-logo">
+                    甜蜜双打
+                    <span>Couple Game</span>
+                </div>
+                <div class="topbar-actions" id="topbarRight">
+                    <!-- 动态填充：未登录显示登录按钮，已登录显示头像 -->
                 </div>
             </div>
-            <div class="center">
-                <button id="start-btn" class="btn btn-large">开始游戏</button>
+
+            <!-- Hero -->
+            <div class="hero">
+                <div class="hero-title">两个人<br>一起玩更好</div>
+                <div class="hero-sub">专为情侣打造的互动游戏平台</div>
+                <div class="hero-badges">
+                    <span class="hero-badge"><i class="fas fa-shield-heart"></i> 安全私密</span>
+                    <span class="hero-badge"><i class="fas fa-heart"></i> 12 款玩法</span>
+                    <span class="hero-badge"><i class="fas fa-star"></i> 每日更新</span>
+                </div>
+            </div>
+
+            <!-- 用户区（JS 动态填充） -->
+            <div id="userSection">
+                <!-- 未登录时显示： -->
+                <div class="login-card" id="loginCard">
+                    <p>登录后数据自动同步，解锁私密专属玩法</p>
+                    <button class="btn-primary" onclick="openAuthModal('login')">
+                        <i class="fas fa-user-plus"></i> 登录 / 注册
+                    </button>
+                </div>
+                <!-- 已登录时 JS 替换为 user-card -->
+            </div>
+
+            <!-- 免费区 -->
+            <div class="section-header">
+                <div class="section-title">免费游戏</div>
+                <div class="section-more">每天都能玩</div>
+            </div>
+
+            <div class="game-grid" id="freeGameGrid">
+                <!-- JS 渲染 -->
+            </div>
+
+            <!-- 私密区 -->
+            <div class="section-header">
+                <div class="section-title">私密模式</div>
+                <div class="section-more" id="privateSectionMore">解锁全部内容</div>
+            </div>
+
+            <div class="game-grid-2" id="privateGameGrid">
+                <!-- JS 渲染 -->
+            </div>
+
+            <!-- 底部占位 -->
+            <div style="height: 20px;"></div>
+        </div>
+
+        <!-- ================================================================
+             卡牌对决
+        ================================================================ -->
+        <div class="screen" id="cardDuelScreen">
+            <div class="game-shell">
+                <div class="game-topbar">
+                    <button class="game-topbar-back" onclick="goToMenu()"><i class="fas fa-chevron-left"></i></button>
+                    <div>
+                        <div class="game-topbar-title">卡牌对决</div>
+                        <div class="game-topbar-meta">三局两胜</div>
+                    </div>
+                    <div style="width:38px;"></div>
+                </div>
+                <div class="info-strip" id="cardDuelInfo"></div>
+                <div class="score-bar" id="cardDuelScore"></div>
+                <div class="play-area" id="cardDuelArea"></div>
             </div>
         </div>
-        
-        <!-- 猜拳界面 -->
-        <div id="rps-phase" class="game-phase">
-            <div class="card">
-                <h2>猜拳决定先手</h2>
-                <p>请双方轮流选择自己的出拳：</p>
-            </div>
-            
-            <!-- 玩家A选择 -->
-            <div class="rps-section" id="player1-section">
-                <h3>玩家A的选择</h3>
-                <div class="rps-options">
-                    <div class="rps-btn" data-choice="rock" data-player="player1"><i class="fas fa-hand-rock"></i></div>
-                    <div class="rps-btn" data-choice="scissors" data-player="player1"><i class="fas fa-hand-scissors"></i></div>
-                    <div class="rps-btn" data-choice="paper" data-player="player1"><i class="fas fa-hand-paper"></i></div>
+
+        <!-- ================================================================
+             真心话大冒险
+        ================================================================ -->
+        <div class="screen" id="truthDareScreen">
+            <div class="game-shell">
+                <div class="game-topbar">
+                    <button class="game-topbar-back" onclick="goToMenu()"><i class="fas fa-chevron-left"></i></button>
+                    <div>
+                        <div class="game-topbar-title">真心话大冒险</div>
+                        <div class="game-topbar-meta">选择难度开始</div>
+                    </div>
+                    <div style="width:38px;"></div>
                 </div>
-            </div>
-            
-            <!-- 玩家B选择 -->
-            <div class="rps-section" id="player2-section" style="display: none;">
-                <h3>玩家B的选择</h3>
-                <div class="rps-options">
-                    <div class="rps-btn" data-choice="rock" data-player="player2"><i class="fas fa-hand-rock"></i></div>
-                    <div class="rps-btn" data-choice="scissors" data-player="player2"><i class="fas fa-hand-scissors"></i></div>
-                    <div class="rps-btn" data-choice="paper" data-player="player2"><i class="fas fa-hand-paper"></i></div>
-                </div>
-            </div>
-            
-            <div class="center">
-                <div id="rps-result"></div>
-                <div class="action-buttons">
-                    <button id="rps-next" class="btn" style="display: none;">下一步</button>
-                    <button id="restart-btn" class="btn btn-secondary">重新开始</button>
-                </div>
+                <div class="info-strip" id="truthDareInfo"></div>
+                <div class="score-bar" id="truthDareScore"></div>
+                <div class="play-area" id="truthDareArea"></div>
             </div>
         </div>
-        
-        <!-- 游戏主界面 -->
-        <div id="game-phase" class="game-phase">
-            <div class="player-info">
-                <div class="player" id="player1">
-                    <h3>玩家A</h3>
-                    <p>手牌: <span id="p1-hand-count">0</span></p>
+
+        <!-- ================================================================
+             亲密接力
+        ================================================================ -->
+        <div class="screen" id="coupleDareScreen">
+            <div class="game-shell">
+                <div class="game-topbar">
+                    <button class="game-topbar-back" onclick="goToMenu()"><i class="fas fa-chevron-left"></i></button>
+                    <div>
+                        <div class="game-topbar-title">亲密接力</div>
+                        <div class="game-topbar-meta">轮流发起任务</div>
+                    </div>
+                    <div style="width:38px;"></div>
                 </div>
-                <div class="player" id="player2">
-                    <h3>玩家B</h3>
-                    <p>手牌: <span id="p2-hand-count">0</span></p>
+                <div class="info-strip" id="coupleDareInfo"></div>
+                <div class="score-bar" id="coupleDareScore"></div>
+                <div class="play-area" id="coupleDareArea"></div>
+            </div>
+        </div>
+
+        <!-- ================================================================
+             抢答对战
+        ================================================================ -->
+        <div class="screen" id="quizBattleScreen">
+            <div class="game-shell">
+                <div class="game-topbar">
+                    <button class="game-topbar-back" onclick="goToMenu()"><i class="fas fa-chevron-left"></i></button>
+                    <div>
+                        <div class="game-topbar-title">抢答对战</div>
+                        <div class="game-topbar-meta">谁先抢答谁答</div>
+                    </div>
+                    <div style="width:38px;"></div>
                 </div>
+                <div class="info-strip" id="quizBattleInfo"></div>
+                <div class="score-bar" id="quizBattleScore"></div>
+                <div class="play-area" id="quizBattleArea"></div>
             </div>
-            
-            <div class="card">
-                <h2 id="turn-info">玩家A的回合</h2>
-                <p>请选择一张卡牌打出</p>
-                <p>牌库剩余: <span id="remaining-cards">58</span> 张</p>
-            </div>
-            
-            <div class="hand" id="player-hand">
-                <!-- 手牌将通过JS动态生成 -->
-            </div>
-            
-            <div class="card-display">
-                <h3>当前卡牌</h3>
-                <div id="current-card" class="card-display-content">
-                    尚未打出卡牌
+        </div>
+
+        <!-- ================================================================
+             默契考验
+        ================================================================ -->
+        <div class="screen" id="loveQuizScreen">
+            <div class="game-shell">
+                <div class="game-topbar">
+                    <button class="game-topbar-back" onclick="goToMenu()"><i class="fas fa-chevron-left"></i></button>
+                    <div>
+                        <div class="game-topbar-title">默契大考验</div>
+                        <div class="game-topbar-meta">背靠背答题</div>
+                    </div>
+                    <div style="width:38px;"></div>
                 </div>
-                <div id="card-actions">
-                    <button id="complete-btn" class="btn">完成指令</button>
+                <div class="info-strip" id="loveQuizInfo"></div>
+                <div class="score-bar" id="loveQuizScore"></div>
+                <div class="play-area" id="loveQuizArea"></div>
+            </div>
+        </div>
+
+        <!-- ================================================================
+             荒岛生存
+        ================================================================ -->
+        <div class="screen" id="desertIslandScreen">
+            <div class="game-shell">
+                <div class="game-topbar">
+                    <button class="game-topbar-back" onclick="goToMenu()"><i class="fas fa-chevron-left"></i></button>
+                    <div>
+                        <div class="game-topbar-title">荒岛生存</div>
+                        <div class="game-topbar-meta">3 选 1 上岛</div>
+                    </div>
+                    <div style="width:38px;"></div>
                 </div>
+                <div class="info-strip" id="desertIslandInfo"></div>
+                <div class="play-area" id="desertIslandArea"></div>
             </div>
-            
-            <div id="game-over" class="game-over" style="display: none;">
-                游戏结束！所有卡牌已使用完毕。
-            </div>
-            
-            <div class="center">
-                <div class="action-buttons">
-                    <button id="next-turn-btn" class="btn" style="display: none;">下一回合</button>
-                    <button id="restart-game-btn" class="btn btn-secondary">重新开始</button>
+        </div>
+
+        <!-- ================================================================
+             甜蜜许愿池
+        ================================================================ -->
+        <div class="screen" id="wheelScreen">
+            <div class="game-shell">
+                <div class="game-topbar">
+                    <button class="game-topbar-back" onclick="goToMenu()"><i class="fas fa-chevron-left"></i></button>
+                    <div>
+                        <div class="game-topbar-title">甜蜜许愿池</div>
+                        <div class="game-topbar-meta">抽取浪漫任务</div>
+                    </div>
+                    <div style="width:38px;"></div>
                 </div>
+                <div class="info-strip" id="wheelInfo"></div>
+                <div class="play-area" id="wheelArea"></div>
             </div>
+        </div>
+
+        <!-- ================================================================
+             亲吻挑战
+        ================================================================ -->
+        <div class="screen" id="kissGameScreen">
+            <div class="game-shell">
+                <div class="game-topbar">
+                    <button class="game-topbar-back" onclick="goToMenu()"><i class="fas fa-chevron-left"></i></button>
+                    <div>
+                        <div class="game-topbar-title">亲吻挑战</div>
+                        <div class="game-topbar-meta">私密模式专属</div>
+                    </div>
+                    <div style="width:38px;"></div>
+                </div>
+                <div class="info-strip" id="kissGameInfo"></div>
+                <div class="play-area" id="kissGameArea"></div>
+            </div>
+        </div>
+
+        <!-- ================================================================
+             私密任务
+        ================================================================ -->
+        <div class="screen" id="secretGeneratorScreen">
+            <div class="game-shell">
+                <div class="game-topbar">
+                    <button class="game-topbar-back" onclick="goToMenu()"><i class="fas fa-chevron-left"></i></button>
+                    <div>
+                        <div class="game-topbar-title">私密任务</div>
+                        <div class="game-topbar-meta">带计时器挑战</div>
+                    </div>
+                    <div style="width:38px;"></div>
+                </div>
+                <div class="info-strip" id="secretGeneratorInfo"></div>
+                <div class="play-area" id="secretGeneratorArea"></div>
+            </div>
+        </div>
+
+        <!-- ================================================================
+             热辣问答
+        ================================================================ -->
+        <div class="screen" id="hotSeatScreen">
+            <div class="game-shell">
+                <div class="game-topbar">
+                    <button class="game-topbar-back" onclick="goToMenu()"><i class="fas fa-chevron-left"></i></button>
+                    <div>
+                        <div class="game-topbar-title">热辣问答</div>
+                        <div class="game-topbar-meta">互相打分</div>
+                    </div>
+                    <div style="width:38px;"></div>
+                </div>
+                <div class="info-strip" id="hotSeatInfo"></div>
+                <div class="score-bar" id="hotSeatScore"></div>
+                <div class="play-area" id="hotSeatArea"></div>
+            </div>
+        </div>
+
+        <!-- ================================================================
+             按摩券
+        ================================================================ -->
+        <div class="screen" id="massageScreen">
+            <div class="game-shell">
+                <div class="game-topbar">
+                    <button class="game-topbar-back" onclick="goToMenu()"><i class="fas fa-chevron-left"></i></button>
+                    <div>
+                        <div class="game-topbar-title">按摩券</div>
+                        <div class="game-topbar-meta">私密模式专属</div>
+                    </div>
+                    <div style="width:38px;"></div>
+                </div>
+                <div class="info-strip" id="massageInfo"></div>
+                <div class="play-area" id="massageArea"></div>
+            </div>
+        </div>
+
+        <!-- ================================================================
+             情书工坊
+        ================================================================ -->
+        <div class="screen" id="loveLetterScreen">
+            <div class="game-shell">
+                <div class="game-topbar">
+                    <button class="game-topbar-back" onclick="goToMenu()"><i class="fas fa-chevron-left"></i></button>
+                    <div>
+                        <div class="game-topbar-title">情书工坊</div>
+                        <div class="game-topbar-meta">私密模式专属</div>
+                    </div>
+                    <div style="width:38px;"></div>
+                </div>
+                <div class="info-strip" id="loveLetterInfo"></div>
+                <div class="play-area" id="loveLetterArea"></div>
+            </div>
+        </div>
+
+        <!-- ================================================================
+             愿望储蓄罐
+        ================================================================ -->
+        <div class="screen" id="dreamListScreen">
+            <div class="game-shell">
+                <div class="game-topbar">
+                    <button class="game-topbar-back" onclick="goToMenu()"><i class="fas fa-chevron-left"></i></button>
+                    <div>
+                        <div class="game-topbar-title">愿望储蓄罐</div>
+                        <div class="game-topbar-meta">私密模式专属</div>
+                    </div>
+                    <div style="width:38px;"></div>
+                </div>
+                <div class="info-strip" id="dreamListInfo"></div>
+                <div class="play-area" id="dreamListArea"></div>
+            </div>
+        </div>
+
+        <!-- ================================================================
+             情侣秒表
+        ================================================================ -->
+        <div class="screen" id="coupleTimerScreen">
+            <div class="game-shell">
+                <div class="game-topbar">
+                    <button class="game-topbar-back" onclick="goToMenu()"><i class="fas fa-chevron-left"></i></button>
+                    <div>
+                        <div class="game-topbar-title">情侣秒表</div>
+                        <div class="game-topbar-meta">私密模式专属</div>
+                    </div>
+                    <div style="width:38px;"></div>
+                </div>
+                <div class="info-strip" id="coupleTimerInfo"></div>
+                <div class="play-area" id="coupleTimerArea"></div>
+            </div>
+        </div>
+
+        <!-- ================================================================
+             支付页
+        ================================================================ -->
+        <div class="screen" id="paymentScreen">
+            <div class="game-shell">
+                <div class="game-topbar">
+                    <button class="game-topbar-back" onclick="showScreen('welcomeScreen')"><i class="fas fa-chevron-left"></i></button>
+                    <div>
+                        <div class="game-topbar-title">解锁私密模式</div>
+                        <div class="game-topbar-meta">一次性付费，永久使用</div>
+                    </div>
+                    <div style="width:38px;"></div>
+                </div>
+                <div class="pay-hero">
+                    <span class="pay-icon">💎</span>
+                    <div class="pay-price">¥19.9</div>
+                    <div class="pay-desc">解锁全部 7 款私密专属玩法</div>
+                </div>
+                <div class="pay-qr-area">
+                    <div class="pay-qr-placeholder"><i class="fas fa-qrcode"></i></div>
+                    <div class="pay-method-label">微信扫码支付</div>
+                </div>
+                <div class="pay-input-area">
+                    <div class="pay-input-label">支付完成后，输入交易订单号</div>
+                    <input type="text" class="modal-input" id="orderInput" placeholder="请输入交易订单号（纯数字）" inputmode="numeric" style="margin-bottom:12px;">
+                    <button class="btn-primary" onclick="unlockPrivateMode()">
+                        <i class="fas fa-unlock"></i> 确认解锁
+                    </button>
+                    <div class="modal-link" style="margin-top:12px;">
+                        订单审核通常在 24 小时内完成
+                    </div>
+                </div>
+                <div style="height:40px;"></div>
+            </div>
+        </div>
+
+        <!-- ================================================================
+             昵称设置
+        ================================================================ -->
+        <div class="screen" id="profileScreen">
+            <div class="game-shell">
+                <div class="game-topbar">
+                    <button class="game-topbar-back" onclick="goToMenu(true)"><i class="fas fa-chevron-left"></i></button>
+                    <div>
+                        <div class="game-topbar-title">设置昵称</div>
+                        <div class="game-topbar-meta">让游戏更有代入感</div>
+                    </div>
+                    <div style="width:38px;"></div>
+                </div>
+                <div class="play-area" id="profileArea"></div>
+            </div>
+        </div>
+
+    </div><!-- /.container -->
+
+    <!-- ================================================================
+         底部导航（固定）
+    ================================================================ -->
+    <nav class="nav-bar" id="bottomNav">
+        <button class="nav-item active" onclick="navTo('welcomeScreen')">
+            <i class="fas fa-house"></i>
+            首页
+        </button>
+        <div class="nav-divider"></div>
+        <button class="nav-item" onclick="navTo('welcomeScreen')">
+            <i class="fas fa-gamepad"></i>
+            游戏
+        </button>
+        <div class="nav-divider"></div>
+        <button class="nav-item" id="navPrivate" onclick="navTo('paymentScreen')">
+            <i class="fas fa-gem"></i>
+            私密
+        </button>
+        <div class="nav-divider"></div>
+        <button class="nav-item" onclick="navTo('myScreen')">
+            <i class="fas fa-user"></i>
+            我的
+        </button>
+    </nav>
+
+    <!-- ================================================================
+         我的页面（独立于 container 之外避免 padding-bottom 冲突）
+    ================================================================ -->
+    <div class="screen" id="myScreen" style="padding-bottom:80px;">
+        <div class="topbar" style="position:sticky;top:0;z-index:100;">
+            <div style="font-size:1.1rem;font-weight:800;color:#fff;">我的</div>
+            <div></div>
+        </div>
+        <div id="myPageArea">
+            <!-- 动态填充 -->
         </div>
     </div>
 
-    <script>
-        // 防止双击缩放
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function (event) {
-            const now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
-        
-        // 移除阻止滚动的代码，允许正常滚动
-        // document.body.addEventListener('touchmove', function(e) {
-        //     if (e.target.closest('.container')) {
-        //         e.preventDefault();
-        //     }
-        // }, { passive: false });
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            // 游戏状态
-            const gameState = {
-                phase: 'welcome',
-                players: {
-                    player1: { hand: [], score: 0, rpsChoice: null },
-                    player2: { hand: [], score: 0, rpsChoice: null }
-                },
-                currentPlayer: 'player1',
-                rpsWinner: null,
-                currentCard: null,
-                currentRpsPlayer: 'player1',
-                cardDeck: [],
-                usedCards: []
-            };
-            
-            // 58张任务卡
-            const cardDeck = [
-                { id: 1, title: "逗猫", content: "用手逗逗对方小猫/小鸡，小猫/小鸡加紧15秒" },
-                { id: 2, title: "艺人", content: "用舌头给对方私密部位写自己的名字" },
-                { id: 3, title: "吸吸", content: "用力吸对方乳头10下" },
-                { id: 4, title: "造型", content: "摆出三个对方认可的性感姿势" },
-                { id: 5, title: "酸奶", content: "将酸奶倒在对方乳头上舔干净" },
-                { id: 6, title: "爱心", content: "在对方脖子种心性草莓" },
-                { id: 7, title: "旋转木马", content: "吸住对方乳头旋转舌头-15秒" },
-                { id: 8, title: "请坐", content: "坐在对方脸上-15秒" },
-                { id: 9, title: "幸运儿", content: "给对方摸/撸并舔ta的乳头-30秒" },
-                { id: 10, title: "观音", content: "观音坐莲姿势让对方动30秒" },
-                { id: 11, title: "品尝", content: "舔舐对方的蜜液并咽下去" },
-                { id: 12, title: "吹气", content: "在对方的耳边轻轻吹气，让ta把你玩坏" },
-                { id: 13, title: "指定卡", content: "可指定对方做一件关于性爱的事" },
-                { id: 14, title: "骑马", content: "对方扮马骑上转两圈" },
-                { id: 15, title: "修路", content: "用舌头从对方的pp舔到肚子-3下" },
-                { id: 16, title: "舔舐", content: "身下体液沾满手指并让对方舔" },
-                { id: 17, title: "蹭", content: "用脸蹭对方胸" },
-                { id: 18, title: "萝卜", content: "吮吸手指，一根一根认真吮吸" },
-                { id: 19, title: "享受", content: "躺下享受让对方舔遍全身" },
-                { id: 20, title: "摄像", content: "拍一段你们俩湿吻的视频" },
-                { id: 21, title: "律师", content: "打对方屁屁，留下巴掌印并拍照记录" },
-                { id: 22, title: "观赏", content: "敞开双腿让对方观赏30秒" },
-                { id: 23, title: "摸底", content: "舔对方的脚底或脚趾头" },
-                { id: 24, title: "咬咬", content: "轻轻咬对方的乳头10下" },
-                { id: 25, title: "鸟窝", content: "用手指捅一下对方的屁眼" },
-                { id: 26, title: "小狗", content: "咬一口对方的屁股" },
-                { id: 27, title: "和面", content: "揉捏对方整个胸/蛋蛋30秒" },
-                { id: 28, title: "盲", content: "对方闭上眼睛，你尽情探索ta的身体30秒" },
-                { id: 29, title: "邀请", content: "邀请对方进入并摇摆屁股不停喊对方的爱称10下" },
-                { id: 30, title: "滑动", content: "大腿夹住对方的头上下移动30秒" },
-                { id: 31, title: "免除卡", content: "免除一次对方的要求" },
-                { id: 32, title: "品尝", content: "kiss对方身上你喜欢的部位，并描述口感" },
-                { id: 33, title: "相互", content: "互摸对方30秒" },
-                { id: 34, title: "给对方拿东西", content: "游戏结束后，12小时内给对方拿东西" },
-                { id: 35, title: "小狗", content: "用头去蹭对方的掌心并说“我是你的小狗" },
-                { id: 36, title: "自慰", content: "两人面对面睁眼看对方自慰" },
-                { id: 37, title: "清晨", content: "第二天早上在对方睡觉期间给对方口醒" },
-                { id: 38, title: "描述", content: "请形容高潮带给自己的感受" },
-                { id: 39, title: "s/m", content: "告诉对方自己有没有S/M倾向" },
-                { id: 40, title: "问答", content: "自己期待的性生活频率是" },
-                { id: 41, title: "地点", content: "除了床上还想在什么地点做爱" },
-                { id: 42, title: "前戏", content: "自慰给对方看，并描述自己正在做的动作，勾引对方扑向你" },
-                { id: 43, title: "口", content: "给对方口至少5分钟" },
-                { id: 44, title: "69", content: "进行一次69式口爱，至少5分钟" },
-                { id: 45, title: "按摩", content: "用手指按摩对方G点/阴茎，至少5分钟并用色情的脏话羞辱对方" },
-                { id: 46, title: "扮演", content: "进行一场师生扮演游戏，要求对方发展不能动，并且可以进行任何“惩罚”方式" },
-                { id: 47, title: "影片", content: "找一个影片，一起照搬影片里的前戏" },
-                { id: 48, title: "高技术", content: "给对方进行一次手口并用的口爱" },
-                { id: 49, title: "角色互换", content: "游戏结束后互相穿对方衣服，角色互换1小时内完成一场双方满足的性爱" },
-                { id: 50, title: "跳舞", content: "一起学一个抖音手势舞并拍视频记录" },
-                { id: 51, title: "毒龙", content: "舔对方屁眼10秒" },
-                { id: 52, title: "扇耳光", content: "删对方或要求对方删自己5个耳光" },
-                { id: 53, title: "深蹲", content: "深蹲3分钟，同时刺激敏感部位" },
-                { id: 54, title: "侮辱", content: "跪在床上，让对方把脚踩在你身体某个部位" },
-                { id: 55, title: "自慰", content: "用对方手自慰" },
-                { id: 56, title: "娇喘", content: "趴在对方身上，看着对方眼睛娇喘" },
-                { id: 57, title: "高潮", content: "把ta弄高潮一次，姿势你定" },
-                { id: 58, title: "寸止", content: "自慰快要高潮时，停下来" }
-           
-            ];
-            
-            // 洗牌函数
-            function shuffleDeck(deck) {
-                for (let i = deck.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [deck[i], deck[j]] = [deck[j], deck[i]];
-                }
-                return deck;
-            }
-            
-            // DOM元素
-            const phases = {
-                welcome: document.getElementById('welcome-phase'),
-                rps: document.getElementById('rps-phase'),
-                game: document.getElementById('game-phase')
-            };
-            
-            const startBtn = document.getElementById('start-btn');
-            const rpsButtons = document.querySelectorAll('.rps-btn');
-            const rpsResult = document.getElementById('rps-result');
-            const rpsNext = document.getElementById('rps-next');
-            const player1Section = document.getElementById('player1-section');
-            const player2Section = document.getElementById('player2-section');
-            const playerHand = document.getElementById('player-hand');
-            const currentCardDisplay = document.getElementById('current-card');
-            const completeBtn = document.getElementById('complete-btn');
-            const nextTurnBtn = document.getElementById('next-turn-btn');
-            const turnInfo = document.getElementById('turn-info');
-            const p1HandCount = document.getElementById('p1-hand-count');
-            const p2HandCount = document.getElementById('p2-hand-count');
-            const player1El = document.getElementById('player1');
-            const player2El = document.getElementById('player2');
-            const restartBtn = document.getElementById('restart-btn');
-            const restartGameBtn = document.getElementById('restart-game-btn');
-            const remainingCardsEl = document.getElementById('remaining-cards');
-            const gameOverEl = document.getElementById('game-over');
-            
-            // 初始化游戏
-            function initGame() {
-                // 创建并洗牌
-                gameState.cardDeck = shuffleDeck([...cardDeck]);
-                gameState.usedCards = [];
-                
-                // 重置玩家手牌
-                gameState.players.player1.hand = [];
-                gameState.players.player2.hand = [];
-                
-                // 为每位玩家抽4张牌
-                for (let i = 0; i < 4; i++) {
-                    if (gameState.cardDeck.length > 0) {
-                        gameState.players.player1.hand.push(gameState.cardDeck.pop());
-                    }
-                    if (gameState.cardDeck.length > 0) {
-                        gameState.players.player2.hand.push(gameState.cardDeck.pop());
-                    }
-                }
-                
-                updateUI();
-            }
-            
-            // 重置游戏状态
-            function resetGame() {
-                gameState.phase = 'welcome';
-                gameState.players.player1 = { hand: [], score: 0, rpsChoice: null };
-                gameState.players.player2 = { hand: [], score: 0, rpsChoice: null };
-                gameState.currentPlayer = 'player1';
-                gameState.rpsWinner = null;
-                gameState.currentCard = null;
-                gameState.currentRpsPlayer = 'player1';
-                gameState.cardDeck = [];
-                gameState.usedCards = [];
-                
-                // 清除猜拳选择
-                document.querySelectorAll('.rps-btn.selected').forEach(btn => {
-                    btn.classList.remove('selected');
-                });
-                
-                // 重置UI
-                currentCardDisplay.textContent = '尚未打出卡牌';
-                completeBtn.style.display = 'none';
-                nextTurnBtn.style.display = 'none';
-                rpsNext.style.display = 'none';
-                rpsResult.innerHTML = '';
-                player1Section.style.display = 'block';
-                player2Section.style.display = 'none';
-                gameOverEl.style.display = 'none';
-                
-                setGamePhase('welcome');
-            }
-            
-            // 从牌库抽一张牌
-            function drawCard() {
-                if (gameState.cardDeck.length > 0) {
-                    return gameState.cardDeck.pop();
-                }
-                return null;
-            }
-            
-            // 更新UI
-            function updateUI() {
-                p1HandCount.textContent = gameState.players.player1.hand.length;
-                p2HandCount.textContent = gameState.players.player2.hand.length;
-                remainingCardsEl.textContent = gameState.cardDeck.length;
-                
-                // 检查游戏是否结束
-                if (gameState.cardDeck.length === 0 && 
-                    gameState.players.player1.hand.length === 0 && 
-                    gameState.players.player2.hand.length === 0) {
-                    gameOverEl.style.display = 'block';
-                }
-            }
-            
-            // 切换游戏阶段
-            function setGamePhase(phase) {
-                for (const key in phases) {
-                    phases[key].classList.remove('active');
-                }
-                phases[phase].classList.add('active');
-                gameState.phase = phase;
-            }
-            
-            // 渲染玩家手牌
-            function renderHand() {
-                playerHand.innerHTML = '';
-                const player = gameState.currentPlayer;
-                
-                gameState.players[player].hand.forEach((card, index) => {
-                    const cardEl = document.createElement('div');
-                    cardEl.className = `card-item task-card`;
-                    cardEl.innerHTML = `
-                        <div class="card-title"><strong>${card.title}</strong></div>
-                        <div class="card-content">${card.content}</div>
-                    `;
-                    cardEl.addEventListener('click', () => playCard(index));
-                    playerHand.appendChild(cardEl);
-                });
-            }
-            
-            // 出牌
-            function playCard(index) {
-                const player = gameState.currentPlayer;
-                gameState.currentCard = gameState.players[player].hand[index];
-                
-                // 从手牌中移除
-                gameState.players[player].hand.splice(index, 1);
-                
-                // 添加到已使用卡牌
-                gameState.usedCards.push(gameState.currentCard);
-                
-                // 更新显示
-                currentCardDisplay.innerHTML = `
-                    <h4><strong>${gameState.currentCard.title}</strong></h4>
-                    <div class="card-item task-card">
-                        <div class="card-title"><strong>${gameState.currentCard.title}</strong></div>
-                        <div class="card-content">${gameState.currentCard.content}</div>
-                    </div>
-                `;
-                
-                // 显示操作按钮
-                completeBtn.style.display = 'inline-block';
-                
-                updateUI();
-                renderHand();
-            }
-            
-            // 切换到下一回合
-            function nextTurn() {
-                // 切换当前玩家
-                gameState.currentPlayer = gameState.currentPlayer === 'player1' ? 'player2' : 'player1';
-                
-                // 为当前玩家补充手牌到4张（如果牌库有足够的牌）
-                const currentPlayer = gameState.currentPlayer;
-                while (gameState.players[currentPlayer].hand.length < 4 && gameState.cardDeck.length > 0) {
-                    const newCard = drawCard();
-                    if (newCard) {
-                        gameState.players[currentPlayer].hand.push(newCard);
-                    }
-                }
-                
-                // 检查游戏是否结束（双方都没有手牌且牌库也没有牌）
-                if (gameState.cardDeck.length === 0 && 
-                    gameState.players.player1.hand.length === 0 && 
-                    gameState.players.player2.hand.length === 0) {
-                    gameOverEl.style.display = 'block';
-                    return;
-                }
-                
-                // 如果当前玩家没有手牌，检查对方是否有手牌
-                if (gameState.players[currentPlayer].hand.length === 0) {
-                    const otherPlayer = currentPlayer === 'player1' ? 'player2' : 'player1';
-                    if (gameState.players[otherPlayer].hand.length === 0) {
-                        // 双方都没有手牌，游戏结束
-                        gameOverEl.style.display = 'block';
-                        return;
-                    } else {
-                        // 当前玩家没有手牌但对方有，继续切换
-                        nextTurn();
-                        return;
-                    }
-                }
-                
-                // 更新界面
-                turnInfo.textContent = `${gameState.currentPlayer === 'player1' ? '玩家A' : '玩家B'}的回合`;
-                currentCardDisplay.textContent = '尚未打出卡牌';
-                completeBtn.style.display = 'none';
-                nextTurnBtn.style.display = 'none';
-                
-                // 更新活跃玩家样式
-                if (gameState.currentPlayer === 'player1') {
-                    player1El.classList.add('active-player');
-                    player2El.classList.remove('active-player');
-                } else {
-                    player2El.classList.add('active-player');
-                    player1El.classList.remove('active-player');
-                }
-                
-                updateUI();
-                renderHand();
-            }
-            
-            // 判断猜拳胜负
-            function determineRpsWinner() {
-                const p1Choice = gameState.players.player1.rpsChoice;
-                const p2Choice = gameState.players.player2.rpsChoice;
-                
-                if (p1Choice === p2Choice) {
-                    return 'draw';
-                }
-                
-                if (
-                    (p1Choice === 'rock' && p2Choice === 'scissors') ||
-                    (p1Choice === 'scissors' && p2Choice === 'paper') ||
-                    (p1Choice === 'paper' && p2Choice === 'rock')
-                ) {
-                    return 'player1';
-                }
-                
-                return 'player2';
-            }
-            
-            // 显示猜拳结果
-            function showRpsResult() {
-                const result = determineRpsWinner();
-                
-                if (result === 'draw') {
-                    rpsResult.innerHTML = `
-                        <div class="card">
-                            <h3>平局！</h3>
-                            <p>双方选择了相同的出手，请重新选择</p>
-                        </div>
-                    `;
-                    
-                    // 重置选择
-                    gameState.players.player1.rpsChoice = null;
-                    gameState.players.player2.rpsChoice = null;
-                    gameState.currentRpsPlayer = 'player1';
-                    
-                    // 清除选中状态
-                    document.querySelectorAll('.rps-btn.selected').forEach(btn => {
-                        btn.classList.remove('selected');
-                    });
-                    
-                    // 显示玩家A的选择界面
-                    player1Section.style.display = 'block';
-                    player2Section.style.display = 'none';
-                } else {
-                    const winner = result === 'player1' ? '玩家A' : '玩家B';
-                    gameState.rpsWinner = result;
-                    
-                    rpsResult.innerHTML = `
-                        <div class="card">
-                            <h3>${winner}赢了！</h3>
-                            <p>${winner}获得先手权利</p>
-                            <div class="rps-result">
-                                <div class="rps-choice">
-                                    <div class="rps-icon"><i class="fas fa-hand-${gameState.players.player1.rpsChoice}"></i></div>
-                                    <p>玩家A</p>
-                                </div>
-                                <div class="rps-choice">
-                                    <div class="rps-icon"><i class="fas fa-hand-${gameState.players.player2.rpsChoice}"></i></div>
-                                    <p>玩家B</p>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    rpsNext.style.display = 'inline-block';
-                }
-            }
-            
-            // 事件监听
-            startBtn.addEventListener('click', () => {
-                setGamePhase('rps');
-            });
-            
-            // 猜拳按钮事件
-            rpsButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const player = btn.dataset.player;
-                    const choice = btn.dataset.choice;
-                    
-                    // 设置玩家选择
-                    gameState.players[player].rpsChoice = choice;
-                    
-                    // 添加选中样式
-                    document.querySelectorAll(`.rps-btn[data-player="${player}"]`).forEach(b => {
-                        b.classList.remove('selected');
-                    });
-                    btn.classList.add('selected');
-                    
-                    // 判断是否双方都已选择
-                    if (gameState.players.player1.rpsChoice && gameState.players.player2.rpsChoice) {
-                        showRpsResult();
-                    } else {
-                        // 切换到下一个玩家选择
-                        gameState.currentRpsPlayer = player === 'player1' ? 'player2' : 'player1';
-                        
-                        if (gameState.currentRpsPlayer === 'player1') {
-                            player1Section.style.display = 'block';
-                            player2Section.style.display = 'none';
-                        } else {
-                            player1Section.style.display = 'none';
-                            player2Section.style.display = 'block';
-                        }
-                    }
-                });
-            });
-            
-            rpsNext.addEventListener('click', () => {
-                gameState.currentPlayer = gameState.rpsWinner;
-                initGame();
-                setGamePhase('game');
-                renderHand();
-                
-                // 设置初始活跃玩家
-                if (gameState.currentPlayer === 'player1') {
-                    player1El.classList.add('active-player');
-                } else {
-                    player2El.classList.add('active-player');
-                }
-            });
-            
-            completeBtn.addEventListener('click', () => {
-                currentCardDisplay.innerHTML += '<p><strong>指令已完成！</strong></p>';
-                completeBtn.style.display = 'none';
-                nextTurnBtn.style.display = 'inline-block';
-            });
-            
-            nextTurnBtn.addEventListener('click', nextTurn);
-            
-            // 重新开始按钮事件
-            restartBtn.addEventListener('click', resetGame);
-            restartGameBtn.addEventListener('click', resetGame);
-        });
-    </script>
+    <!-- ================================================================
+         登录/注册 底部弹窗
+    ================================================================ -->
+    <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+        <div class="modal-sheet" id="modalSheet">
+            <!-- 动态填充 -->
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/payment.js"></script>
+    <script src="js/games.js"></script>
 </body>
 </html>
