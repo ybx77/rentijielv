@@ -8,8 +8,15 @@ export default async function handler(req, res) {
     if (!rawPath) {
         return res.status(400).json({ code: 400, msg: '缺少 path 参数' });
     }
+    // 同时兼容两种调用：
+    //   /api/proxy?path=login              → 后端 /login.php
+    //   /api/proxy?path=api/login          → 后端 /login.php （去掉前缀 api/）
+    let normalized = rawPath;
+    if (/^api\//i.test(normalized)) {
+        normalized = normalized.replace(/^api\//i, '');
+    }
     // 自动拼 .php 后缀（如果调用方已经带了就不重复拼）
-    const finalPath = rawPath.endsWith('.php') ? rawPath : rawPath + '.php';
+    const finalPath = normalized.endsWith('.php') ? normalized : normalized + '.php';
     const url = API_TARGET + '/' + finalPath;
 
     const headers = { 'Content-Type': 'application/json' };

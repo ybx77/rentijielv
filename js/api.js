@@ -18,9 +18,16 @@ async function api(path, options = {}) {
         }
     };
     // 走显式代理 /api/proxy?path=xxx，彻底绕开 .php 与 catch-all
-    const cleanPath = path.replace(/^\/+/, '').replace(/\.php(\?|$)/, '$1');
-    const [p, q = ''] = cleanPath.split('?');
-    const url = '/api/proxy?path=' + encodeURIComponent(p) + (q ? '&' + q : '');
+    // 兼容：api('/api/login.php') / api('login.php') / api('login') / api('/api/partner.php?action=bind')
+    const trimmed = path.replace(/^\/+|\/+$/g, '');
+    const cleanPath = trimmed.replace(/^api\//, '').replace(/\.php(\?|$)/, '$1');
+    // 把原始查询串合到代理 URL 上，避免和 path= 冲突
+    let url = '/api/proxy?path=' + encodeURIComponent(cleanPath);
+    // 取出原始调用方 path 里自带的 ?xxx，拼到 url 后
+    const qIdx = cleanPath.indexOf('?');
+    if (qIdx >= 0) {
+        url += '&' + cleanPath.slice(qIdx + 1);
+    }
     if (options.body) opts.body = JSON.stringify(options.body);
     try {
         const r = await fetch(url, opts);
