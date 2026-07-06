@@ -71,7 +71,6 @@ function openAuthModal(mode = 'login') {
         ${!isLogin ? `
             <input type="text" class="modal-input" id="authNickname" placeholder="你的昵称（可选）" autocomplete="off">
             <input type="text" class="modal-input" id="authPartner" placeholder="TA 的昵称（可选）" autocomplete="off">
-            <input type="email" class="modal-input" id="authEmail" placeholder="邮箱（用于找回账号）" autocomplete="email">
         ` : ''}
         <button class="btn-primary" onclick="submitAuth(${!isLogin})" style="margin-top:8px;">
             <i class="fas fa-${isLogin ? 'right-to-bracket' : 'user-plus'}"></i>
@@ -97,10 +96,7 @@ async function submitAuth(wantLogin) {
         } else {
             const nickname = document.getElementById('authNickname')?.value.trim() || '';
             const partner  = document.getElementById('authPartner')?.value.trim() || '';
-            const email    = document.getElementById('authEmail')?.value.trim() || '';
-            if (!email) return showToast('请填写邮箱');
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showToast('邮箱格式不正确');
-            await Auth.register({ username, password, nickname, partner_name: partner, email });
+            await Auth.register({ username, password, nickname, partner_name: partner, email: '' });
             showToast('注册成功 ✨');
         }
         closeModal();
@@ -271,7 +267,6 @@ async function loadMyPage() {
                 <div class="my-sub" style="color:${currentUser.is_vip ? 'var(--gold)' : 'var(--text2)'}">
                     ${currentUser.is_vip ? '💎 私密模式已解锁' : '🎮 免费模式'}
                 </div>
-                ${currentUser.email ? `<div class="my-sub" style="font-size:0.75rem;">${currentUser.email}</div>` : ''}
             </div>
             <button class="btn-icon" onclick="openEditProfile()" title="编辑资料"><i class="fas fa-pen"></i></button>
         </div>
@@ -404,8 +399,6 @@ function openEditProfile() {
         <input type="text" class="modal-input" id="editNickname" value="${user.nickname || ''}" placeholder="你的昵称">
         <label class="pay-input-label" style="display:block;margin-bottom:4px;">TA 的昵称</label>
         <input type="text" class="modal-input" id="editPartner" value="${user.partner?.nickname || user.partner_name || ''}" placeholder="TA 的昵称">
-        <label class="pay-input-label" style="display:block;margin-bottom:4px;">邮箱</label>
-        <input type="email" class="modal-input" id="editEmail" value="${user.email || ''}" placeholder="用于找回账号">
         <button class="btn-primary" onclick="saveEditProfile()" style="margin-top:8px;">
             <i class="fas fa-check"></i> 保存修改
         </button>
@@ -416,10 +409,8 @@ function openEditProfile() {
 async function saveEditProfile() {
     const nickname = document.getElementById('editNickname')?.value.trim() || '';
     const partner  = document.getElementById('editPartner')?.value.trim() || '';
-    const email    = document.getElementById('editEmail')?.value.trim() || '';
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showToast('邮箱格式不正确');
     try {
-        await Auth.updateProfile({ nickname, partner_name: partner, email });
+        await Auth.updateProfile({ nickname, partner_name: partner, email: '' });
         closeModal();
         showToast('资料已更新 ✨');
         await refreshAuthState();

@@ -1,10 +1,10 @@
 const API_TARGET = 'http://43.248.102.104:30872';
 
 export default async function handler(req, res) {
-    // req.url 格式如 /api/login.php?xxx
-    // 去掉开头的 /，拼接完整的后端地址
+    // 接收 /api/login 或 /api/login.php，强制拼回 .php 再转发到后端
     const pathPart = req.url.replace(/^\//, '');
-    const url = API_TARGET + '/' + pathPart;
+    const finalPath = pathPart.replace(/^api\//, '').replace(/^([^\?]+?)(?=\?|$)/, '$1.php');
+    const url = API_TARGET + '/' + finalPath;
 
     const headers = { 'Content-Type': 'application/json' };
     if (req.headers.authorization) {
