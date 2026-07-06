@@ -17,11 +17,13 @@ async function api(path, options = {}) {
             ...(options.headers || {})
         }
     };
-    // 去掉 .php 后缀，避免 Vercel WAF 拦截 .php 请求
-    const cleanPath = path.replace(/\.php(\?|$)/, '$1');
+    // 走显式代理 /api/proxy?path=xxx，彻底绕开 .php 与 catch-all
+    const cleanPath = path.replace(/^\/+/, '').replace(/\.php(\?|$)/, '$1');
+    const [p, q = ''] = cleanPath.split('?');
+    const url = '/api/proxy?path=' + encodeURIComponent(p) + (q ? '&' + q : '');
     if (options.body) opts.body = JSON.stringify(options.body);
     try {
-        const r = await fetch(window.API_BASE_URL + cleanPath, opts);
+        const r = await fetch(url, opts);
         const j = await r.json().catch(() => ({ code: r.status, msg: '服务异常' }));
         if (j.code !== 200) {
             if (j.code === 401) {
